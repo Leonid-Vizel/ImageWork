@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ImageWork
 {
-    public static class ImageWork
+    public static class Transformations
     {
         /// <summary>
         /// Метод для перевода изображения в чёрно-белый формат
@@ -84,8 +77,8 @@ namespace ImageWork
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 graphics.DrawString(text, font, new SolidBrush(color), position);
                 graphics.Flush();
-                return newMap;
             }
+            return newMap;
         }
 
         /// <summary>
@@ -96,26 +89,23 @@ namespace ImageWork
         /// <param name="font">Шрифт текста</param>
         /// <param name="color">Цвет текста</param>
         /// <param name="position">Позиция текста</param>
+        /// <param name="opacity">Уровень прозрасностьиот 0.0 до 1.0</param>
         /// <param name="angle">Угол поворота текста</param>
         /// <returns>Изображение с текстом или null, если текст не помещается</returns>
-        public static Bitmap PasteRotatedText(Bitmap initial, string text, Font font, Color color, PointF position, float angle)
+        public static Bitmap PasteText(Bitmap initial, string text, Font font, Color color, PointF position, float angle)
         {
             Bitmap newMap = new Bitmap(initial);
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
-                if (!CheckStrigFitness(newMap, text, font, position, graphics))
-                {
-                    return null;
-                }
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.ResetTransform();
+                graphics.TranslateTransform(position.X,position.Y);
                 graphics.RotateTransform(angle);
-                graphics.DrawString(text, font, new SolidBrush(color), position);
+                graphics.DrawString(text, font, new SolidBrush(color), 0, 0);
                 graphics.Flush();
-                return newMap;
             }
+            return newMap;
         }
 
         /// <summary>
@@ -142,14 +132,14 @@ namespace ImageWork
         /// <param name="additional">Изображение для вставки</param>
         /// <param name="position">Позиция картинки для вставки</param>
         /// <param name="angle">Угол поворота изображения</param>
-        public static Bitmap PasteRotatedBitmap(Bitmap initial, Bitmap additional, PointF position, float angle)
+        public static Bitmap PasteBitmap(Bitmap initial, Bitmap additional, PointF position, float angle)
         {
             Bitmap newMap = new Bitmap(initial);
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
-                graphics.ResetTransform();
+                graphics.TranslateTransform(position.X, position.Y);
                 graphics.RotateTransform(angle);
-                graphics.DrawImage(additional, position);
+                graphics.DrawImage(additional, 0, 0);
                 graphics.Flush();
                 return newMap;
             }
@@ -163,11 +153,10 @@ namespace ImageWork
         /// <param name="height">Высота нового изображения</param>
         public static Bitmap Resize(Bitmap initial, int width, int height)
         {
-            Rectangle destRect = new Rectangle(0, 0, width, height);
             Bitmap newMap = new Bitmap(width, height);
             newMap.SetResolution(initial.HorizontalResolution, initial.VerticalResolution);
 
-            using (var graphics = Graphics.FromImage(newMap))
+            using (Graphics graphics = Graphics.FromImage(newMap))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
@@ -178,8 +167,29 @@ namespace ImageWork
                 using (var wrapMode = new ImageAttributes())
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(initial, destRect, 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, wrapMode);
+                    graphics.DrawImage(initial, new Rectangle(0, 0, width, height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, wrapMode);
                 }
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод, задающий прозрачность изоражению
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="opacity">Значение прозрачности от 0.0 до 1.0 (1.0 - нет прозрасности. 0.0 - полная прозрачность)</param>
+        /// <returns>Изображение указанной прозрасности</returns>
+        public static Bitmap SetOpacity(Bitmap initial, float opacity)
+        {
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = opacity; 
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
+                graphics.Flush();
             }
             return newMap;
         }
