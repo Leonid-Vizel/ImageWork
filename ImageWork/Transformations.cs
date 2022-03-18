@@ -14,16 +14,23 @@ namespace ImageWork
         public static Bitmap ToBlackWhite(Bitmap initial)
         {
             Bitmap newMap = new Bitmap(initial.Width, initial.Height);
-            int grayScale;
-            Color initialColor;
-            for (int i = 0; i < initial.Width; i++)
+            using (Graphics graphics = Graphics.FromImage(newMap))
             {
-                for (int j = 0; j < initial.Height; j++)
+                ColorMatrix colorMatrix = new ColorMatrix(
+                   new float[][]
+                   {
+                     new float[] {.3f, .3f, .3f, 0, 0},
+                     new float[] {.59f, .59f, .59f, 0, 0},
+                     new float[] {.11f, .11f, .11f, 0, 0},
+                     new float[] {0, 0, 0, 1, 0},
+                     new float[] {0, 0, 0, 0, 1}
+                   });
+                using (ImageAttributes attributes = new ImageAttributes())
                 {
-                    initialColor = initial.GetPixel(i, j);
-                    grayScale = (initialColor.R + initialColor.G + initialColor.B) / 3;
-                    newMap.SetPixel(i, j, Color.FromArgb(grayScale, grayScale, grayScale));
+                    attributes.SetColorMatrix(colorMatrix);
+                    graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
                 }
+                graphics.Flush();
             }
             return newMap;
         }
@@ -100,7 +107,7 @@ namespace ImageWork
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.TranslateTransform(position.X,position.Y);
+                graphics.TranslateTransform(position.X, position.Y);
                 graphics.RotateTransform(angle);
                 graphics.DrawString(text, font, new SolidBrush(color), 0, 0);
                 graphics.Flush();
@@ -185,10 +192,12 @@ namespace ImageWork
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
                 ColorMatrix matrix = new ColorMatrix();
-                matrix.Matrix33 = opacity; 
-                ImageAttributes attributes = new ImageAttributes();
-                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
+                matrix.Matrix33 = opacity;
+                using (ImageAttributes attributes = new ImageAttributes())
+                {
+                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                    graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
+                }
                 graphics.Flush();
             }
             return newMap;
