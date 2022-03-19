@@ -38,6 +38,7 @@ namespace TestApp
             this.opacityBtn = new System.Windows.Forms.Button();
             this.sizeChangeBtn = new System.Windows.Forms.Button();
             this.grayShadeBtn = new System.Windows.Forms.Button();
+            this.cropBitmap = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -46,23 +47,23 @@ namespace TestApp
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(332, 442);
+            this.pictureBox1.Size = new System.Drawing.Size(447, 582);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(461, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(576, 12);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(332, 440);
+            this.pictureBox2.Size = new System.Drawing.Size(447, 582);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
             // textBtn
             // 
-            this.textBtn.Location = new System.Drawing.Point(350, 12);
+            this.textBtn.Location = new System.Drawing.Point(465, 12);
             this.textBtn.Name = "textBtn";
             this.textBtn.Size = new System.Drawing.Size(105, 58);
             this.textBtn.TabIndex = 2;
@@ -72,7 +73,7 @@ namespace TestApp
             // 
             // bitmapBtn
             // 
-            this.bitmapBtn.Location = new System.Drawing.Point(350, 76);
+            this.bitmapBtn.Location = new System.Drawing.Point(465, 76);
             this.bitmapBtn.Name = "bitmapBtn";
             this.bitmapBtn.Size = new System.Drawing.Size(105, 58);
             this.bitmapBtn.TabIndex = 3;
@@ -82,7 +83,7 @@ namespace TestApp
             // 
             // rotatedTextBtn
             // 
-            this.rotatedTextBtn.Location = new System.Drawing.Point(350, 140);
+            this.rotatedTextBtn.Location = new System.Drawing.Point(465, 140);
             this.rotatedTextBtn.Name = "rotatedTextBtn";
             this.rotatedTextBtn.Size = new System.Drawing.Size(105, 58);
             this.rotatedTextBtn.TabIndex = 4;
@@ -92,7 +93,7 @@ namespace TestApp
             // 
             // rotatedBitmapBtn
             // 
-            this.rotatedBitmapBtn.Location = new System.Drawing.Point(350, 204);
+            this.rotatedBitmapBtn.Location = new System.Drawing.Point(465, 204);
             this.rotatedBitmapBtn.Name = "rotatedBitmapBtn";
             this.rotatedBitmapBtn.Size = new System.Drawing.Size(105, 58);
             this.rotatedBitmapBtn.TabIndex = 5;
@@ -102,7 +103,7 @@ namespace TestApp
             // 
             // opacityBtn
             // 
-            this.opacityBtn.Location = new System.Drawing.Point(350, 268);
+            this.opacityBtn.Location = new System.Drawing.Point(465, 268);
             this.opacityBtn.Name = "opacityBtn";
             this.opacityBtn.Size = new System.Drawing.Size(105, 58);
             this.opacityBtn.TabIndex = 6;
@@ -112,7 +113,7 @@ namespace TestApp
             // 
             // sizeChangeBtn
             // 
-            this.sizeChangeBtn.Location = new System.Drawing.Point(350, 332);
+            this.sizeChangeBtn.Location = new System.Drawing.Point(465, 332);
             this.sizeChangeBtn.Name = "sizeChangeBtn";
             this.sizeChangeBtn.Size = new System.Drawing.Size(105, 58);
             this.sizeChangeBtn.TabIndex = 7;
@@ -122,7 +123,7 @@ namespace TestApp
             // 
             // grayShadeBtn
             // 
-            this.grayShadeBtn.Location = new System.Drawing.Point(350, 396);
+            this.grayShadeBtn.Location = new System.Drawing.Point(465, 396);
             this.grayShadeBtn.Name = "grayShadeBtn";
             this.grayShadeBtn.Size = new System.Drawing.Size(105, 58);
             this.grayShadeBtn.TabIndex = 8;
@@ -130,11 +131,22 @@ namespace TestApp
             this.grayShadeBtn.UseVisualStyleBackColor = true;
             this.grayShadeBtn.Click += new System.EventHandler(this.grayShadeBtn_Click);
             // 
+            // cropBitmap
+            // 
+            this.cropBitmap.Location = new System.Drawing.Point(465, 460);
+            this.cropBitmap.Name = "cropBitmap";
+            this.cropBitmap.Size = new System.Drawing.Size(105, 58);
+            this.cropBitmap.TabIndex = 9;
+            this.cropBitmap.Text = "Вырезать квадрат 100x100";
+            this.cropBitmap.UseVisualStyleBackColor = true;
+            this.cropBitmap.Click += new System.EventHandler(this.cropBitmap_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(805, 464);
+            this.ClientSize = new System.Drawing.Size(1032, 606);
+            this.Controls.Add(this.cropBitmap);
             this.Controls.Add(this.grayShadeBtn);
             this.Controls.Add(this.sizeChangeBtn);
             this.Controls.Add(this.opacityBtn);
@@ -167,6 +179,7 @@ namespace TestApp
         private System.Windows.Forms.Button opacityBtn;
         private System.Windows.Forms.Button sizeChangeBtn;
         private System.Windows.Forms.Button grayShadeBtn;
+        private System.Windows.Forms.Button cropBitmap;
     }
 }
 

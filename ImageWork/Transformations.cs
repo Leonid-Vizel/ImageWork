@@ -158,9 +158,9 @@ namespace ImageWork
         /// <param name="initial">Исходное изображение</param>
         /// <param name="width">Ширина нового изображения</param>
         /// <param name="height">Высота нового изображения</param>
-        public static Bitmap Resize(Bitmap initial, int width, int height)
+        public static Bitmap Resize(Bitmap initial, Size size)
         {
-            Bitmap newMap = new Bitmap(width, height);
+            Bitmap newMap = new Bitmap(size.Width, size.Height);
             newMap.SetResolution(initial.HorizontalResolution, initial.VerticalResolution);
 
             using (Graphics graphics = Graphics.FromImage(newMap))
@@ -174,7 +174,7 @@ namespace ImageWork
                 using (var wrapMode = new ImageAttributes())
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(initial, new Rectangle(0, 0, width, height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, wrapMode);
+                    graphics.DrawImage(initial, new Rectangle(0, 0, size.Width, size.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, wrapMode);
                 }
             }
             return newMap;
@@ -198,6 +198,23 @@ namespace ImageWork
                     attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                     graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
                 }
+                graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод для вырезания из изображения прямоугольника
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="section">Прямоугольник который хотите вырезать. Укажиет его Положение(x,y) и Размеры(height,width)</param>
+        /// <returns>Вырезанный прямоугольник из изображения</returns>
+        public static Bitmap CropImage(Bitmap initial, Rectangle section)
+        {
+            var newMap = new Bitmap(section.Width, section.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.DrawImage(initial, 0, 0, section, GraphicsUnit.Pixel);
                 graphics.Flush();
             }
             return newMap;

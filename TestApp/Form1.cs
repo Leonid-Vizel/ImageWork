@@ -78,12 +78,17 @@ namespace TestApp
 
         private void sizeChangeBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.Resize(pictureBox1.Image as Bitmap, 1000, 1000);
+            pictureBox2.Image = Transformations.Resize(pictureBox1.Image as Bitmap, new Size(1000, 1000));
         }
 
         private void grayShadeBtn_Click(object sender, EventArgs e)
         {
             pictureBox2.Image = Transformations.ToBlackWhite(pictureBox1.Image as Bitmap);
+        }
+
+        private void cropBitmap_Click(object sender, EventArgs e)
+        {
+            pictureBox2.Image = Transformations.CropImage(pictureBox1.Image as Bitmap, new Rectangle(50, 50, 100, 100));
         }
     }
 }
