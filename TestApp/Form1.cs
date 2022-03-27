@@ -90,5 +90,15 @@ namespace TestApp
         {
             pictureBox2.Image = Transformations.CropImage(pictureBox1.Image as Bitmap, new Rectangle(50, 50, 100, 100));
         }
+
+        private void inverseColorBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox2.Image = Transformations.InverseColor(pictureBox1.Image as Bitmap);
+        }
+
+        private void mirrorBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox2.Image = Transformations.Mirror(pictureBox1.Image as Bitmap,true,true);
+        }
     }
 }

@@ -39,31 +39,33 @@ namespace TestApp
             this.sizeChangeBtn = new System.Windows.Forms.Button();
             this.grayShadeBtn = new System.Windows.Forms.Button();
             this.cropBitmap = new System.Windows.Forms.Button();
+            this.inverseColorBtn = new System.Windows.Forms.Button();
+            this.mirrorBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(11, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(447, 582);
+            this.pictureBox1.Size = new System.Drawing.Size(495, 668);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(576, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(623, 3);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(447, 582);
+            this.pictureBox2.Size = new System.Drawing.Size(495, 668);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
             // textBtn
             // 
-            this.textBtn.Location = new System.Drawing.Point(465, 12);
+            this.textBtn.Location = new System.Drawing.Point(512, 12);
             this.textBtn.Name = "textBtn";
             this.textBtn.Size = new System.Drawing.Size(105, 58);
             this.textBtn.TabIndex = 2;
@@ -73,7 +75,7 @@ namespace TestApp
             // 
             // bitmapBtn
             // 
-            this.bitmapBtn.Location = new System.Drawing.Point(465, 76);
+            this.bitmapBtn.Location = new System.Drawing.Point(512, 76);
             this.bitmapBtn.Name = "bitmapBtn";
             this.bitmapBtn.Size = new System.Drawing.Size(105, 58);
             this.bitmapBtn.TabIndex = 3;
@@ -83,7 +85,7 @@ namespace TestApp
             // 
             // rotatedTextBtn
             // 
-            this.rotatedTextBtn.Location = new System.Drawing.Point(465, 140);
+            this.rotatedTextBtn.Location = new System.Drawing.Point(512, 140);
             this.rotatedTextBtn.Name = "rotatedTextBtn";
             this.rotatedTextBtn.Size = new System.Drawing.Size(105, 58);
             this.rotatedTextBtn.TabIndex = 4;
@@ -93,7 +95,7 @@ namespace TestApp
             // 
             // rotatedBitmapBtn
             // 
-            this.rotatedBitmapBtn.Location = new System.Drawing.Point(465, 204);
+            this.rotatedBitmapBtn.Location = new System.Drawing.Point(512, 204);
             this.rotatedBitmapBtn.Name = "rotatedBitmapBtn";
             this.rotatedBitmapBtn.Size = new System.Drawing.Size(105, 58);
             this.rotatedBitmapBtn.TabIndex = 5;
@@ -103,7 +105,7 @@ namespace TestApp
             // 
             // opacityBtn
             // 
-            this.opacityBtn.Location = new System.Drawing.Point(465, 268);
+            this.opacityBtn.Location = new System.Drawing.Point(512, 268);
             this.opacityBtn.Name = "opacityBtn";
             this.opacityBtn.Size = new System.Drawing.Size(105, 58);
             this.opacityBtn.TabIndex = 6;
@@ -113,7 +115,7 @@ namespace TestApp
             // 
             // sizeChangeBtn
             // 
-            this.sizeChangeBtn.Location = new System.Drawing.Point(465, 332);
+            this.sizeChangeBtn.Location = new System.Drawing.Point(512, 332);
             this.sizeChangeBtn.Name = "sizeChangeBtn";
             this.sizeChangeBtn.Size = new System.Drawing.Size(105, 58);
             this.sizeChangeBtn.TabIndex = 7;
@@ -123,7 +125,7 @@ namespace TestApp
             // 
             // grayShadeBtn
             // 
-            this.grayShadeBtn.Location = new System.Drawing.Point(465, 396);
+            this.grayShadeBtn.Location = new System.Drawing.Point(512, 396);
             this.grayShadeBtn.Name = "grayShadeBtn";
             this.grayShadeBtn.Size = new System.Drawing.Size(105, 58);
             this.grayShadeBtn.TabIndex = 8;
@@ -133,7 +135,7 @@ namespace TestApp
             // 
             // cropBitmap
             // 
-            this.cropBitmap.Location = new System.Drawing.Point(465, 460);
+            this.cropBitmap.Location = new System.Drawing.Point(512, 524);
             this.cropBitmap.Name = "cropBitmap";
             this.cropBitmap.Size = new System.Drawing.Size(105, 58);
             this.cropBitmap.TabIndex = 9;
@@ -141,11 +143,33 @@ namespace TestApp
             this.cropBitmap.UseVisualStyleBackColor = true;
             this.cropBitmap.Click += new System.EventHandler(this.cropBitmap_Click);
             // 
+            // inverseColorBtn
+            // 
+            this.inverseColorBtn.Location = new System.Drawing.Point(512, 460);
+            this.inverseColorBtn.Name = "inverseColorBtn";
+            this.inverseColorBtn.Size = new System.Drawing.Size(105, 58);
+            this.inverseColorBtn.TabIndex = 10;
+            this.inverseColorBtn.Text = "Инверсия цвета";
+            this.inverseColorBtn.UseVisualStyleBackColor = true;
+            this.inverseColorBtn.Click += new System.EventHandler(this.inverseColorBtn_Click);
+            // 
+            // mirrorBtn
+            // 
+            this.mirrorBtn.Location = new System.Drawing.Point(512, 588);
+            this.mirrorBtn.Name = "mirrorBtn";
+            this.mirrorBtn.Size = new System.Drawing.Size(105, 58);
+            this.mirrorBtn.TabIndex = 11;
+            this.mirrorBtn.Text = "Отзеркалить";
+            this.mirrorBtn.UseVisualStyleBackColor = true;
+            this.mirrorBtn.Click += new System.EventHandler(this.mirrorBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1032, 606);
+            this.ClientSize = new System.Drawing.Size(1130, 692);
+            this.Controls.Add(this.mirrorBtn);
+            this.Controls.Add(this.inverseColorBtn);
             this.Controls.Add(this.cropBitmap);
             this.Controls.Add(this.grayShadeBtn);
             this.Controls.Add(this.sizeChangeBtn);
@@ -180,6 +204,8 @@ namespace TestApp
         private System.Windows.Forms.Button sizeChangeBtn;
         private System.Windows.Forms.Button grayShadeBtn;
         private System.Windows.Forms.Button cropBitmap;
+        private System.Windows.Forms.Button inverseColorBtn;
+        private System.Windows.Forms.Button mirrorBtn;
     }
 }
 

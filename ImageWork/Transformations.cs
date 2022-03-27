@@ -204,7 +204,7 @@ namespace ImageWork
         }
 
         /// <summary>
-        /// Метод для вырезания из изображения прямоугольника
+        /// Метод, вырезающий из изображения прямоугольник
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
         /// <param name="section">Прямоугольник который хотите вырезать. Укажиет его Положение(x,y) и Размеры(height,width)</param>
@@ -216,6 +216,60 @@ namespace ImageWork
             {
                 graphics.DrawImage(initial, 0, 0, section, GraphicsUnit.Pixel);
                 graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод инвертирования цветов изображения
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <returns>Инвертированное изображение</returns>
+        public static Bitmap InverseColor(Bitmap initial)
+        {
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                ColorMatrix colorMatrix = new ColorMatrix(
+                   new float[][]
+                   {
+                    new float[] {-1, 0, 0, 0, 0},
+                    new float[] {0, -1, 0, 0, 0},
+                    new float[] {0, 0, -1, 0, 0},
+                    new float[] {0, 0, 0, 1, 0},
+                    new float[] {1, 1, 1, 0, 1}
+                   });
+                using (ImageAttributes attributes = new ImageAttributes())
+                {
+                    attributes.SetColorMatrix(colorMatrix);
+                    graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
+                }
+                graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод отзеркаливания изображения по X и/или Y
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="flipX">Отзеркалить по X</param>
+        /// <param name="flipY">Отзеркалить по Y</param>
+        /// <returns>Отзеркаленное изображение</returns>
+        public static Bitmap Mirror(Bitmap initial, bool flipX, bool flipY)
+        {
+            Bitmap newMap = new Bitmap(initial);
+            if (flipX && flipY)
+            {
+                newMap.RotateFlip(RotateFlipType.RotateNoneFlipXY);
+            }
+            else if (flipX)
+            {
+                newMap.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            }
+            else
+            {
+                newMap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             }
             return newMap;
         }
