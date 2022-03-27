@@ -1,4 +1,4 @@
-# ItemWork
+# ImageWork
 ##### (Soon will be renamed to ZBitmap)
 ImageWork - Simple .Net library for fast and easy Bitmap editing
 
