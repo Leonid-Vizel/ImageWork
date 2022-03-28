@@ -1,6 +1,5 @@
-# ImageWork
-##### (Soon will be renamed to ZBitmap)
-ImageWork - Simple .Net library for fast and easy Bitmap editing
+# ZBitmap
+ZBitmap - Simple .Net library for fast and easy Bitmap editing
 
 #### Methods represented here:
 ✅ToBlackWhite() - Transforms image colors to gray scale
