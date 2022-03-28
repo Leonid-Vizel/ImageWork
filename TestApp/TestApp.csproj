@@ -80,9 +80,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImageWork\ImageWork.csproj">
+    <ProjectReference Include="..\ZBitmap\ZBitmap.csproj">
       <Project>{208b7537-6e33-432f-a80a-813fa72a7a4f}</Project>
-      <Name>ImageWork</Name>
+      <Name>ZBitmap</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
