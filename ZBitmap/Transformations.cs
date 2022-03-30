@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
@@ -35,33 +36,6 @@ namespace ImageWork
             return newMap;
         }
 
-        private static bool CheckStrigFitness(Bitmap initial, string text, Font font, PointF position, Graphics graphics)
-        {
-            if (position.X > initial.Width)
-            {
-                return false;
-            }
-
-            if (position.Y > initial.Height)
-            {
-                return false;
-            }
-
-            SizeF size = graphics.MeasureString(text, font);
-
-            if (size.Width + position.X > initial.Width)
-            {
-                return false;
-            }
-
-            if (size.Height + position.Y > initial.Height)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Метод, добавляющий на Bitmap текст в опереденном месте
         /// </summary>
@@ -75,10 +49,6 @@ namespace ImageWork
             Bitmap newMap = new Bitmap(initial);
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
-                if (!CheckStrigFitness(initial, text, font, position, graphics))
-                {
-                    return null;
-                }
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -270,6 +240,96 @@ namespace ImageWork
             else
             {
                 newMap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод вырезания круга из изображения
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <returns>Круг, вырезанный из изображения</returns>
+        public static Bitmap ClipCircle(Bitmap initial)
+        {
+            int side = Math.Min(initial.Width, initial.Height);
+            int radius = side / 2;
+
+            Bitmap newMap = new Bitmap(side, side);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                graphics.TranslateTransform(newMap.Width / 2, newMap.Height / 2);
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddEllipse(0 - radius, 0 - radius, side, side);
+                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                graphics.DrawImage(initial, new Rectangle(-radius, -radius, side, side), new Rectangle(initial.Width / 2 - radius, initial.Height / 2 - radius, side, side), GraphicsUnit.Pixel);
+                graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод вырезания эллипса из изображения
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <returns>Эллипс, вырезанный из изображения</returns>
+        public static Bitmap ClipEllipse(Bitmap initial)
+        {
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddEllipse(0, 0, initial.Width, initial.Height);
+                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height),new Rectangle(0, 0, initial.Width, initial.Height),GraphicsUnit.Pixel);
+                graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод вырезания треугольника из изображения
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <returns>Треугольник, вырезанный из изображения</returns>
+        public static Bitmap ClipTriangle(Bitmap initial)
+        {
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddPolygon(new PointF[3]
+                {
+                    new PointF((float)initial.Width / 2, 0),
+                    new PointF(initial.Width, initial.Height),
+                    new PointF(0, initial.Height)
+                });
+                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
+                graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод вырезания многоугольника из изображения
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="polygonPoints">Координаты углов многоугольника</param>
+        /// <returns>Многоугольника, вырезанный из изображения</returns>
+        public static Bitmap ClipPolygon(Bitmap initial, PointF[] polygonPoints)
+        {
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddPolygon(polygonPoints);
+                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
+                graphics.Flush();
             }
             return newMap;
         }

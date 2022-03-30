@@ -41,6 +41,9 @@ namespace TestApp
             this.cropBitmap = new System.Windows.Forms.Button();
             this.inverseColorBtn = new System.Windows.Forms.Button();
             this.mirrorBtn = new System.Windows.Forms.Button();
+            this.clipCircleBtn = new System.Windows.Forms.Button();
+            this.clipEllipseBtn = new System.Windows.Forms.Button();
+            this.clipTriangleBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +59,7 @@ namespace TestApp
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(623, 3);
+            this.pictureBox2.Location = new System.Drawing.Point(734, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(495, 668);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -159,15 +162,48 @@ namespace TestApp
             this.mirrorBtn.Name = "mirrorBtn";
             this.mirrorBtn.Size = new System.Drawing.Size(105, 58);
             this.mirrorBtn.TabIndex = 11;
-            this.mirrorBtn.Text = "Отзеркалить";
+            this.mirrorBtn.Text = "Отзеркалить (X)";
             this.mirrorBtn.UseVisualStyleBackColor = true;
             this.mirrorBtn.Click += new System.EventHandler(this.mirrorBtn_Click);
+            // 
+            // clipCircleBtn
+            // 
+            this.clipCircleBtn.Location = new System.Drawing.Point(623, 12);
+            this.clipCircleBtn.Name = "clipCircleBtn";
+            this.clipCircleBtn.Size = new System.Drawing.Size(105, 58);
+            this.clipCircleBtn.TabIndex = 12;
+            this.clipCircleBtn.Text = "Вырезать круг";
+            this.clipCircleBtn.UseVisualStyleBackColor = true;
+            this.clipCircleBtn.Click += new System.EventHandler(this.clipCircleBtn_Click);
+            // 
+            // clipEllipseBtn
+            // 
+            this.clipEllipseBtn.Location = new System.Drawing.Point(623, 76);
+            this.clipEllipseBtn.Name = "clipEllipseBtn";
+            this.clipEllipseBtn.Size = new System.Drawing.Size(105, 58);
+            this.clipEllipseBtn.TabIndex = 13;
+            this.clipEllipseBtn.Text = "Вырезать эллипс";
+            this.clipEllipseBtn.UseVisualStyleBackColor = true;
+            this.clipEllipseBtn.Click += new System.EventHandler(this.clipEllipseBtn_Click);
+            // 
+            // clipTriangleBtn
+            // 
+            this.clipTriangleBtn.Location = new System.Drawing.Point(623, 140);
+            this.clipTriangleBtn.Name = "clipTriangleBtn";
+            this.clipTriangleBtn.Size = new System.Drawing.Size(105, 58);
+            this.clipTriangleBtn.TabIndex = 14;
+            this.clipTriangleBtn.Text = "Вырезать треугольник";
+            this.clipTriangleBtn.UseVisualStyleBackColor = true;
+            this.clipTriangleBtn.Click += new System.EventHandler(this.clipTriangleBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1130, 692);
+            this.ClientSize = new System.Drawing.Size(1241, 692);
+            this.Controls.Add(this.clipTriangleBtn);
+            this.Controls.Add(this.clipEllipseBtn);
+            this.Controls.Add(this.clipCircleBtn);
             this.Controls.Add(this.mirrorBtn);
             this.Controls.Add(this.inverseColorBtn);
             this.Controls.Add(this.cropBitmap);
@@ -206,6 +242,9 @@ namespace TestApp
         private System.Windows.Forms.Button cropBitmap;
         private System.Windows.Forms.Button inverseColorBtn;
         private System.Windows.Forms.Button mirrorBtn;
+        private System.Windows.Forms.Button clipCircleBtn;
+        private System.Windows.Forms.Button clipEllipseBtn;
+        private System.Windows.Forms.Button clipTriangleBtn;
     }
 }
 

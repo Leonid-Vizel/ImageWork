@@ -98,7 +98,22 @@ namespace TestApp
 
         private void mirrorBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.Mirror(pictureBox1.Image as Bitmap,true,true);
+            pictureBox2.Image = Transformations.Mirror(pictureBox1.Image as Bitmap,true,false);
+        }
+
+        private void clipCircleBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox2.Image = Transformations.ClipCircle(pictureBox1.Image as Bitmap);
+        }
+
+        private void clipEllipseBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox2.Image = Transformations.ClipEllipse(pictureBox1.Image as Bitmap);
+        }
+
+        private void clipTriangleBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox2.Image = Transformations.ClipTriangle(pictureBox1.Image as Bitmap);
         }
     }
 }
