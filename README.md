@@ -18,6 +18,13 @@ ZBitmap - Simple .Net library for fast and easy Bitmap editing
 
 ✅Mirror() - Reflects a bitmap in X and/or Y
 
+✅ClipCircle() - Clips circle from initial Image
+
+✅ClipEllipse() - Clips ellipse from initial Image
+
+✅ClipTriagle() - Clips triangle from initial Image
+
+✅ClipPolygon() - Clips polygon from initial Image
 # Want more?
 
 I'd be happy to hear your ideas in the Issues section!
