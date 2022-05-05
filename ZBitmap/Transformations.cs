@@ -3,19 +3,20 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace Zbitmap
+namespace ZBitmap
 {
+    /// <summary>
+    /// Основной класс библиотеки ZBitmap для преобразования изображений
+    /// </summary>
     public static class Transformations
     {
         /// <summary>
         /// Метод для перевода изображения в чёрно-белый формат
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <returns>Чёрно-белое изображение</returns>
-        public static Bitmap ToBlackWhite(Bitmap initial)
+        public static void ToBlackWhite(Bitmap initial)
         {
-            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            using (Graphics graphics = Graphics.FromImage(initial))
             {
                 ColorMatrix colorMatrix = new ColorMatrix(
                    new float[][]
@@ -33,92 +34,161 @@ namespace Zbitmap
                 }
                 graphics.Flush();
             }
-            return newMap;
         }
 
         /// <summary>
         /// Метод, добавляющий на Bitmap текст в опереденном месте
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <param name="text">Текст для вставки</param>
-        /// <param name="font">Шрифт текста</param>
-        /// <param name="position">Координаты текста на картинке</param>
-        /// <returns>Изображение с текстом или null, если текст не помещается</returns>
-        public static Bitmap PasteText(Bitmap initial, string text, Font font, Color color, PointF position)
+        /// <param name="overlay">Объект с информацией о вставляемом тексте</param>
+        public static void PasteText(Bitmap initial, TextOverlay overlay)
         {
-            Bitmap newMap = new Bitmap(initial);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            using (Graphics graphics = Graphics.FromImage(initial))
             {
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.DrawString(text, font, new SolidBrush(color), position);
+                if (overlay.Angle != 0)
+                {
+                    graphics.TranslateTransform(overlay.Location.X, overlay.Location.Y);
+                    graphics.RotateTransform(overlay.Angle);
+                    graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), new Point(0, 0));
+                }
+                else
+                {
+                    graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), overlay.Location);
+                }
                 graphics.Flush();
             }
-            return newMap;
         }
 
         /// <summary>
-        /// Метод, добавляющий на Bitmap текст в опереденном месте с определённым углом
+        /// Метод, последовательно вставляющий тексты на изображение
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <param name="text">Текст для вставки</param>
-        /// <param name="font">Шрифт текста</param>
-        /// <param name="color">Цвет текста</param>
-        /// <param name="position">Позиция текста</param>
-        /// <param name="opacity">Уровень прозрасностьиот 0.0 до 1.0</param>
-        /// <param name="angle">Угол поворота текста</param>
-        /// <returns>Изображение с текстом или null, если текст не помещается</returns>
-        public static Bitmap PasteText(Bitmap initial, string text, Font font, Color color, PointF position, float angle)
+        /// <param name="overlays">Массив с информацией о вставляемых текстах</param>
+        public static void PasteTexts(Bitmap initial, params TextOverlay[] overlays)
         {
-            Bitmap newMap = new Bitmap(initial);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            if (overlays.Length == 0)
+            {
+                return;
+            }
+            using (Graphics graphics = Graphics.FromImage(initial))
             {
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.TranslateTransform(position.X, position.Y);
-                graphics.RotateTransform(angle);
-                graphics.DrawString(text, font, new SolidBrush(color), 0, 0);
+                foreach (TextOverlay overlay in overlays)
+                {
+                    if (overlay.Angle != 0)
+                    {
+                        graphics.TranslateTransform(overlay.Location.X, overlay.Location.Y);
+                        graphics.RotateTransform(overlay.Angle);
+                        graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), new Point(0, 0));
+                    }
+                    else
+                    {
+                        graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), overlay.Location);
+                    }
+                    if (overlay.Angle != 0)
+                    {
+                        graphics.RotateTransform(-overlay.Angle);
+                        graphics.TranslateTransform(0, 0);
+                    }
+                }
                 graphics.Flush();
             }
-            return newMap;
         }
 
         /// <summary>
         /// Метод, добавляющий на Bitmap другой Bitmap
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <param name="additional">Изображение для вставки</param>
-        /// <param name="position">Позиция картинки для вставки</param>
-        public static Bitmap PasteBitmap(Bitmap initial, Bitmap additional, PointF position)
+        /// <param name="overlay">Объект с информацией о вставляемом изобрежении</param>
+        public static void PasteBitmap(Bitmap initial, BitmapOverlay overlay)
         {
-            Bitmap newMap = new Bitmap(initial);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            using (Graphics graphics = Graphics.FromImage(initial))
             {
-                graphics.DrawImage(additional, position);
+                if (overlay.Angle != 0)
+                {
+                    graphics.TranslateTransform(overlay.Location.X, overlay.Location.Y);
+                    graphics.RotateTransform(overlay.Angle);
+                    if (initial.Size.Equals(overlay.Size))
+                    {
+                        graphics.DrawImage(overlay.Bitmap, new Point(0, 0));
+                    }
+                    else
+                    {
+                        graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), new Point(0, 0));
+                    }
+                }
+                else
+                {
+
+                    if (initial.Size.Equals(overlay.Size))
+                    {
+                        graphics.DrawImage(overlay.Bitmap, overlay.Location);
+                    }
+                    else
+                    {
+                        graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), overlay.Location);
+                    }
+                }
                 graphics.Flush();
-                return newMap;
+            }
+            if (overlay.DisposeAfterUsage)
+            {
+                overlay.Bitmap.Dispose();
             }
         }
 
         /// <summary>
-        /// Метод, добавляющий на Bitmap другой Bitmap под углом
+        /// Метод, последовательно накладывающий изображения на исходное изображение
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <param name="additional">Изображение для вставки</param>
-        /// <param name="position">Позиция картинки для вставки</param>
-        /// <param name="angle">Угол поворота изображения</param>
-        public static Bitmap PasteBitmap(Bitmap initial, Bitmap additional, PointF position, float angle)
+        /// <param name="overlays">Массив с информацией о вставляемых изображениях</param>
+        public static void PasteBitmaps(Bitmap initial, params BitmapOverlay[] overlays)
         {
-            Bitmap newMap = new Bitmap(initial);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            using (Graphics graphics = Graphics.FromImage(initial))
             {
-                graphics.TranslateTransform(position.X, position.Y);
-                graphics.RotateTransform(angle);
-                graphics.DrawImage(additional, 0, 0);
+                foreach (BitmapOverlay overlay in overlays)
+                {
+                    if (overlay.Angle != 0)
+                    {
+                        graphics.TranslateTransform(overlay.Location.X, overlay.Location.Y);
+                        graphics.RotateTransform(overlay.Angle);
+                        if (initial.Size.Equals(overlay.Size))
+                        {
+                            graphics.DrawImage(overlay.Bitmap, new Point(0, 0));
+                        }
+                        else
+                        {
+                            graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), new Point(0, 0));
+                        }
+                    }
+                    else
+                    {
+
+                        if (initial.Size.Equals(overlay.Size))
+                        {
+                            graphics.DrawImage(overlay.Bitmap, overlay.Location);
+                        }
+                        else
+                        {
+                            graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), overlay.Location);
+                        }
+                    }
+                    if (overlay.Angle != 0)
+                    {
+                        graphics.TranslateTransform(0, 0);
+                        graphics.RotateTransform(-overlay.Angle);
+                    }
+                    if (overlay.DisposeAfterUsage)
+                    {
+                        overlay.Bitmap.Dispose();
+                    }
+                }
                 graphics.Flush();
-                return newMap;
             }
         }
 
@@ -126,8 +196,7 @@ namespace Zbitmap
         /// Метод, изменяющий разрещение картинки
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <param name="width">Ширина нового изображения</param>
-        /// <param name="height">Высота нового изображения</param>
+        /// <param name="size">Размеры нового изображения</param>
         public static Bitmap Resize(Bitmap initial, Size size)
         {
             Bitmap newMap = new Bitmap(size.Width, size.Height);
@@ -158,8 +227,8 @@ namespace Zbitmap
         /// <returns>Изображение указанной прозрасности</returns>
         public static Bitmap SetOpacity(Bitmap initial, float opacity)
         {
-            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            Bitmap bitmapWithOpacity = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(bitmapWithOpacity))
             {
                 ColorMatrix matrix = new ColorMatrix();
                 matrix.Matrix33 = opacity;
@@ -170,7 +239,7 @@ namespace Zbitmap
                 }
                 graphics.Flush();
             }
-            return newMap;
+            return bitmapWithOpacity;
         }
 
         /// <summary>
@@ -195,10 +264,9 @@ namespace Zbitmap
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
         /// <returns>Инвертированное изображение</returns>
-        public static Bitmap InverseColor(Bitmap initial)
+        public static void InverseColor(Bitmap initial)
         {
-            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
-            using (Graphics graphics = Graphics.FromImage(newMap))
+            using (Graphics graphics = Graphics.FromImage(initial))
             {
                 ColorMatrix colorMatrix = new ColorMatrix(
                    new float[][]
@@ -216,7 +284,6 @@ namespace Zbitmap
                 }
                 graphics.Flush();
             }
-            return newMap;
         }
 
         /// <summary>
@@ -225,23 +292,20 @@ namespace Zbitmap
         /// <param name="initial">Исходное изображение</param>
         /// <param name="flipX">Отзеркалить по X</param>
         /// <param name="flipY">Отзеркалить по Y</param>
-        /// <returns>Отзеркаленное изображение</returns>
-        public static Bitmap Mirror(Bitmap initial, bool flipX, bool flipY)
+        public static void Mirror(Bitmap initial, bool flipX, bool flipY)
         {
-            Bitmap newMap = new Bitmap(initial);
             if (flipX && flipY)
             {
-                newMap.RotateFlip(RotateFlipType.RotateNoneFlipXY);
+                initial.RotateFlip(RotateFlipType.RotateNoneFlipXY);
             }
             else if (flipX)
             {
-                newMap.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                initial.RotateFlip(RotateFlipType.RotateNoneFlipX);
             }
             else
             {
-                newMap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                initial.RotateFlip(RotateFlipType.RotateNoneFlipY);
             }
-            return newMap;
         }
 
         /// <summary>
@@ -282,7 +346,7 @@ namespace Zbitmap
                 GraphicsPath gp = new GraphicsPath();
                 gp.AddEllipse(0, 0, initial.Width, initial.Height);
                 graphics.SetClip(new Region(gp), CombineMode.Replace);
-                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height),new Rectangle(0, 0, initial.Width, initial.Height),GraphicsUnit.Pixel);
+                graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
                 graphics.Flush();
             }
             return newMap;

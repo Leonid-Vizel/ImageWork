@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Zbitmap;
+using ZBitmap;
 
 namespace TestApp
 {
     public partial class Form1 : Form
     {
+        private OpenFileDialog dialog = null;
         public Form1()
         {
+            dialog = new OpenFileDialog();
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -35,36 +36,72 @@ namespace TestApp
 
         private void textBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.PasteText(pictureBox1.Image as Bitmap, "COCK AND BALLS", this.Font, Color.Red, new PointF(100, 100));
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.PasteTexts(fromBox, new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font));
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void doubleTextBtn_Click(object sender, EventArgs e)
+        {
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.PasteTexts(fromBox, 
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 120), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 140), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 160), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 180), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 200), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 220), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 240), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 260), Font),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 280), Font)
+                );
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void bitmapBtn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                try
+                try //Try только для Image.FromFile
                 {
-                    pictureBox2.Image = Transformations.PasteBitmap(pictureBox1.Image as Bitmap, Image.FromFile(dialog.FileName) as Bitmap, new PointF(100, 100));
+                    Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+                    Transformations.PasteBitmap(fromBox, new BitmapOverlay(Image.FromFile(dialog.FileName) as Bitmap, new Point(100, 100)));
+                    Image imageToDispose = pictureBox2.Image;
+                    pictureBox2.Image = fromBox;
+                    imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
                 }
-                catch
-                { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка загрузки: {ex}");
+                }
             }
         }
 
         private void rotatedTextBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.PasteText(pictureBox1.Image as Bitmap, "COCK AND BALLS", this.Font, Color.Red, new PointF(50, 50), 90F);
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.PasteText(fromBox, new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 90F));
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void rotatedBitmapBtn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                try
+                try //Try только для Image.FromFile
                 {
-                    pictureBox2.Image = Transformations.PasteBitmap(pictureBox1.Image as Bitmap, Image.FromFile(dialog.FileName) as Bitmap, new PointF(100, 100), 90F);
+                    Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+                    Transformations.PasteBitmap(fromBox, new BitmapOverlay(Image.FromFile(dialog.FileName) as Bitmap, new Point(100, 100), 90F));
+                    Image imageToDispose = pictureBox2.Image;
+                    pictureBox2.Image = fromBox;
+                    imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
                 }
                 catch
                 { }
@@ -73,47 +110,71 @@ namespace TestApp
 
         private void opacityBtn_Click(object sender, EventArgs e)
         {
+            Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.SetOpacity(pictureBox1.Image as Bitmap, 0.5F);
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void sizeChangeBtn_Click(object sender, EventArgs e)
         {
+            Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.Resize(pictureBox1.Image as Bitmap, new Size(1000, 1000));
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void grayShadeBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.ToBlackWhite(pictureBox1.Image as Bitmap);
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.ToBlackWhite(fromBox);
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void cropBitmap_Click(object sender, EventArgs e)
         {
+            Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.CropImage(pictureBox1.Image as Bitmap, new Rectangle(50, 50, 100, 100));
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void inverseColorBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.InverseColor(pictureBox1.Image as Bitmap);
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.InverseColor(fromBox);
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void mirrorBtn_Click(object sender, EventArgs e)
         {
-            pictureBox2.Image = Transformations.Mirror(pictureBox1.Image as Bitmap,true,false);
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.Mirror(fromBox, true, false);
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void clipCircleBtn_Click(object sender, EventArgs e)
         {
+            Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.ClipCircle(pictureBox1.Image as Bitmap);
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void clipEllipseBtn_Click(object sender, EventArgs e)
         {
+            Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.ClipEllipse(pictureBox1.Image as Bitmap);
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
         private void clipTriangleBtn_Click(object sender, EventArgs e)
         {
+            Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.ClipTriangle(pictureBox1.Image as Bitmap);
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
     }
 }
