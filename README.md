@@ -6,7 +6,11 @@ ZBitmap - Simple .Net library for fast and easy Bitmap editing
 
 ✅PasteText() - Pastes text on the image (With rotation if you will specify the angle)
 
+✅PasteTexts() - Pastes texts on the image (With rotation if you will specify the angle)
+
 ✅PasteBitmap() - Pastes image on the initial image (With rotation if you will specify the angle)
+
+✅PasteBitmaps() - Pastes images on the initial image (With rotation if you will specify the angle)
 
 ✅Resize() - Resizes your bitmap to the specified size
 
