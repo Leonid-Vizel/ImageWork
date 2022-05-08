@@ -7,30 +7,31 @@ namespace TestApp
 {
     public partial class Form1 : Form
     {
-        private OpenFileDialog dialog = null;
         public Form1()
         {
-            dialog = new OpenFileDialog();
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (dialog.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                try
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    pictureBox1.Image = Image.FromFile(dialog.FileName);
+                    try
+                    {
+                        pictureBox1.Image = Image.FromFile(dialog.FileName);
+                    }
+                    catch
+                    {
+                        Close();
+                    }
                     Activate();
                 }
-                catch
+                else
                 {
                     Close();
                 }
-            }
-            else
-            {
-                Close();
             }
         }
 
@@ -43,10 +44,10 @@ namespace TestApp
             imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
 
-        private void doubleTextBtn_Click(object sender, EventArgs e)
+        private void multiTextBtn_Click(object sender, EventArgs e)
         {
             Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
-            Transformations.PasteTexts(fromBox, 
+            Transformations.PasteTexts(fromBox,
                 new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font),
                 new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 120), Font),
                 new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 140), Font),
@@ -65,19 +66,25 @@ namespace TestApp
 
         private void bitmapBtn_Click(object sender, EventArgs e)
         {
-            if (dialog.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                try //Try только для Image.FromFile
+                Bitmap fromFile = null;
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
+                    try
+                    {
+                        fromFile = Image.FromFile(dialog.FileName) as Bitmap;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка загрузки: {ex}");
+                        return;
+                    }
                     Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
-                    Transformations.PasteBitmap(fromBox, new BitmapOverlay(Image.FromFile(dialog.FileName) as Bitmap, new Point(100, 100)));
+                    Transformations.PasteBitmap(fromBox, new BitmapOverlay(fromFile, new Point(100, 100), disposeAfterUsage: true)); //disposeAfterUsage: true для того, чтобы очистилось после прорисовки
                     Image imageToDispose = pictureBox2.Image;
                     pictureBox2.Image = fromBox;
                     imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка загрузки: {ex}");
                 }
             }
         }
@@ -93,18 +100,26 @@ namespace TestApp
 
         private void rotatedBitmapBtn_Click(object sender, EventArgs e)
         {
-            if (dialog.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                try //Try только для Image.FromFile
+                Bitmap fromFile = null;
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
+                    try
+                    {
+                        fromFile = Image.FromFile(dialog.FileName) as Bitmap;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка загрузки: {ex}");
+                        return;
+                    }
                     Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
-                    Transformations.PasteBitmap(fromBox, new BitmapOverlay(Image.FromFile(dialog.FileName) as Bitmap, new Point(100, 100), 90F));
+                    Transformations.PasteBitmap(fromBox, new BitmapOverlay(fromFile, new Point(100, 100), 90F, true));
                     Image imageToDispose = pictureBox2.Image;
                     pictureBox2.Image = fromBox;
                     imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
                 }
-                catch
-                { }
             }
         }
 
@@ -175,6 +190,80 @@ namespace TestApp
             Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = Transformations.ClipTriangle(pictureBox1.Image as Bitmap);
             imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void multiRotatedTextBtn_Click(object sender, EventArgs e)
+        {
+            Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+            Transformations.PasteTexts(fromBox,
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(120, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(140, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(160, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(180, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(200, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(220, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(240, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(260, 100), Font, 90F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(280, 100), Font, 90F)
+                );
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = fromBox;
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void multiRotatedBitmapBtn_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap fromFile = null;
+                    try
+                    {
+                        fromFile = Image.FromFile(dialog.FileName) as Bitmap;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка загрузки: {ex}");
+                        return;
+                    }
+                    Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+                    Transformations.PasteBitmaps(fromBox,
+                            new BitmapOverlay(fromFile, new Point(200, 200), 90F, false),
+                            new BitmapOverlay(fromFile, new Point(200, 200), -90F, true));
+                    Image imageToDispose = pictureBox2.Image;
+                    pictureBox2.Image = fromBox;
+                    imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+                }
+            }
+        }
+
+        private void multiBitmapBtn_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap fromFile = null;
+                    try
+                    {
+                        fromFile = Image.FromFile(dialog.FileName) as Bitmap;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка загрузки: {ex}");
+                        return;
+                    }
+                    Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
+                    Transformations.PasteBitmaps(fromBox,
+                            new BitmapOverlay(fromFile, new Point(100, 100), disposeAfterUsage: false), //Чтобы сразу не стёрлось из памяти, так как использую один и тот же объект
+                            new BitmapOverlay(fromFile, new Point(200, 200), disposeAfterUsage: true)); //Уничтожаю объект под конец
+                    Image imageToDispose = pictureBox2.Image;
+                    pictureBox2.Image = fromBox;
+                    imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+                }
+            }
         }
     }
 }

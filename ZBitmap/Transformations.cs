@@ -11,14 +11,11 @@ namespace ZBitmap
     public static class Transformations
     {
         /// <summary>
-        /// Метод для перевода изображения в чёрно-белый формат
+        /// Статический конструктор класса для инициализации цветовых матриц
         /// </summary>
-        /// <param name="initial">Исходное изображение</param>
-        public static void ToBlackWhite(Bitmap initial)
+        static Transformations()
         {
-            using (Graphics graphics = Graphics.FromImage(initial))
-            {
-                ColorMatrix colorMatrix = new ColorMatrix(
+            blackWhiteMatrix = new ColorMatrix(
                    new float[][]
                    {
                      new float[] {.3f, .3f, .3f, 0, 0},
@@ -27,9 +24,39 @@ namespace ZBitmap
                      new float[] {0, 0, 0, 1, 0},
                      new float[] {0, 0, 0, 0, 1}
                    });
+            inverseColorMatrix = new ColorMatrix(
+                   new float[][]
+                   {
+                    new float[] {-1, 0, 0, 0, 0},
+                    new float[] {0, -1, 0, 0, 0},
+                    new float[] { 0, 0, -1, 0, 0 },
+                    new float[] { 0, 0, 0, 1, 0 },
+                    new float[] { 1, 1, 1, 0, 1 }
+                   });
+        }
+
+        #region ColorMatrixes
+        /// <summary>
+        /// Цветовая матрица для чёрно-белого преобразования цветов
+        /// </summary>
+        private static ColorMatrix blackWhiteMatrix;
+        /// <summary>
+        /// Цветовая матрица для инверсии цветов
+        /// </summary>
+        private static ColorMatrix inverseColorMatrix;
+        #endregion
+
+        /// <summary>
+        /// Метод для перевода изображения в чёрно-белый формат
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        public static void ToBlackWhite(Bitmap initial)
+        {
+            using (Graphics graphics = Graphics.FromImage(initial))
+            {
                 using (ImageAttributes attributes = new ImageAttributes())
                 {
-                    attributes.SetColorMatrix(colorMatrix);
+                    attributes.SetColorMatrix(blackWhiteMatrix);
                     graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
                 }
                 graphics.Flush();
@@ -85,15 +112,12 @@ namespace ZBitmap
                         graphics.TranslateTransform(overlay.Location.X, overlay.Location.Y);
                         graphics.RotateTransform(overlay.Angle);
                         graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), new Point(0, 0));
+                        graphics.RotateTransform(-overlay.Angle);
+                        graphics.TranslateTransform(-overlay.Location.X, -overlay.Location.Y);
                     }
                     else
                     {
                         graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), overlay.Location);
-                    }
-                    if (overlay.Angle != 0)
-                    {
-                        graphics.RotateTransform(-overlay.Angle);
-                        graphics.TranslateTransform(0, 0);
                     }
                 }
                 graphics.Flush();
@@ -119,7 +143,10 @@ namespace ZBitmap
                     }
                     else
                     {
-                        graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), new Point(0, 0));
+                        using (Bitmap resizedBitmap = Resize(overlay.Bitmap, overlay.Size))
+                        {
+                            graphics.DrawImage(resizedBitmap, new Point(0, 0));
+                        }
                     }
                 }
                 else
@@ -131,7 +158,10 @@ namespace ZBitmap
                     }
                     else
                     {
-                        graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), overlay.Location);
+                        using (Bitmap resizedBitmap = Resize(overlay.Bitmap, overlay.Size))
+                        {
+                            graphics.DrawImage(resizedBitmap, overlay.Location);
+                        }
                     }
                 }
                 graphics.Flush();
@@ -163,25 +193,27 @@ namespace ZBitmap
                         }
                         else
                         {
-                            graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), new Point(0, 0));
+                            using (Bitmap resizedBitmap = Resize(overlay.Bitmap, overlay.Size))
+                            {
+                                graphics.DrawImage(resizedBitmap, new Point(0, 0));
+                            }
                         }
+                        graphics.TranslateTransform(-overlay.Location.X, -overlay.Location.Y);
+                        graphics.RotateTransform(-overlay.Angle);
                     }
                     else
                     {
-
                         if (initial.Size.Equals(overlay.Size))
                         {
                             graphics.DrawImage(overlay.Bitmap, overlay.Location);
                         }
                         else
                         {
-                            graphics.DrawImage(Resize(overlay.Bitmap, overlay.Size), overlay.Location);
+                            using (Bitmap resizedBitmap = Resize(overlay.Bitmap, overlay.Size))
+                            {
+                                graphics.DrawImage(resizedBitmap, overlay.Location);
+                            }
                         }
-                    }
-                    if (overlay.Angle != 0)
-                    {
-                        graphics.TranslateTransform(0, 0);
-                        graphics.RotateTransform(-overlay.Angle);
                     }
                     if (overlay.DisposeAfterUsage)
                     {
@@ -268,18 +300,9 @@ namespace ZBitmap
         {
             using (Graphics graphics = Graphics.FromImage(initial))
             {
-                ColorMatrix colorMatrix = new ColorMatrix(
-                   new float[][]
-                   {
-                    new float[] {-1, 0, 0, 0, 0},
-                    new float[] {0, -1, 0, 0, 0},
-                    new float[] {0, 0, -1, 0, 0},
-                    new float[] {0, 0, 0, 1, 0},
-                    new float[] {1, 1, 1, 0, 1}
-                   });
                 using (ImageAttributes attributes = new ImageAttributes())
                 {
-                    attributes.SetColorMatrix(colorMatrix);
+                    attributes.SetColorMatrix(inverseColorMatrix);
                     graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
                 }
                 graphics.Flush();

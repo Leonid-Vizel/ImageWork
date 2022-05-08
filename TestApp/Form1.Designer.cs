@@ -44,7 +44,10 @@ namespace TestApp
             this.clipCircleBtn = new System.Windows.Forms.Button();
             this.clipEllipseBtn = new System.Windows.Forms.Button();
             this.clipTriangleBtn = new System.Windows.Forms.Button();
-            this.doubleTextBtn = new System.Windows.Forms.Button();
+            this.multiTextBtn = new System.Windows.Forms.Button();
+            this.multiRotatedTextBtn = new System.Windows.Forms.Button();
+            this.multiRotatedBitmapBtn = new System.Windows.Forms.Button();
+            this.multiBitmapBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -89,7 +92,7 @@ namespace TestApp
             // 
             // rotatedTextBtn
             // 
-            this.rotatedTextBtn.Location = new System.Drawing.Point(512, 204);
+            this.rotatedTextBtn.Location = new System.Drawing.Point(512, 268);
             this.rotatedTextBtn.Name = "rotatedTextBtn";
             this.rotatedTextBtn.Size = new System.Drawing.Size(105, 58);
             this.rotatedTextBtn.TabIndex = 4;
@@ -99,7 +102,7 @@ namespace TestApp
             // 
             // rotatedBitmapBtn
             // 
-            this.rotatedBitmapBtn.Location = new System.Drawing.Point(512, 268);
+            this.rotatedBitmapBtn.Location = new System.Drawing.Point(512, 396);
             this.rotatedBitmapBtn.Name = "rotatedBitmapBtn";
             this.rotatedBitmapBtn.Size = new System.Drawing.Size(105, 58);
             this.rotatedBitmapBtn.TabIndex = 5;
@@ -109,7 +112,7 @@ namespace TestApp
             // 
             // opacityBtn
             // 
-            this.opacityBtn.Location = new System.Drawing.Point(512, 332);
+            this.opacityBtn.Location = new System.Drawing.Point(512, 524);
             this.opacityBtn.Name = "opacityBtn";
             this.opacityBtn.Size = new System.Drawing.Size(105, 58);
             this.opacityBtn.TabIndex = 6;
@@ -119,7 +122,7 @@ namespace TestApp
             // 
             // sizeChangeBtn
             // 
-            this.sizeChangeBtn.Location = new System.Drawing.Point(512, 396);
+            this.sizeChangeBtn.Location = new System.Drawing.Point(512, 588);
             this.sizeChangeBtn.Name = "sizeChangeBtn";
             this.sizeChangeBtn.Size = new System.Drawing.Size(105, 58);
             this.sizeChangeBtn.TabIndex = 7;
@@ -129,7 +132,7 @@ namespace TestApp
             // 
             // grayShadeBtn
             // 
-            this.grayShadeBtn.Location = new System.Drawing.Point(512, 460);
+            this.grayShadeBtn.Location = new System.Drawing.Point(623, 12);
             this.grayShadeBtn.Name = "grayShadeBtn";
             this.grayShadeBtn.Size = new System.Drawing.Size(105, 58);
             this.grayShadeBtn.TabIndex = 8;
@@ -139,7 +142,7 @@ namespace TestApp
             // 
             // cropBitmap
             // 
-            this.cropBitmap.Location = new System.Drawing.Point(512, 588);
+            this.cropBitmap.Location = new System.Drawing.Point(623, 140);
             this.cropBitmap.Name = "cropBitmap";
             this.cropBitmap.Size = new System.Drawing.Size(105, 58);
             this.cropBitmap.TabIndex = 9;
@@ -149,7 +152,7 @@ namespace TestApp
             // 
             // inverseColorBtn
             // 
-            this.inverseColorBtn.Location = new System.Drawing.Point(512, 524);
+            this.inverseColorBtn.Location = new System.Drawing.Point(623, 76);
             this.inverseColorBtn.Name = "inverseColorBtn";
             this.inverseColorBtn.Size = new System.Drawing.Size(105, 58);
             this.inverseColorBtn.TabIndex = 10;
@@ -159,7 +162,7 @@ namespace TestApp
             // 
             // mirrorBtn
             // 
-            this.mirrorBtn.Location = new System.Drawing.Point(623, 12);
+            this.mirrorBtn.Location = new System.Drawing.Point(623, 204);
             this.mirrorBtn.Name = "mirrorBtn";
             this.mirrorBtn.Size = new System.Drawing.Size(105, 58);
             this.mirrorBtn.TabIndex = 11;
@@ -169,7 +172,7 @@ namespace TestApp
             // 
             // clipCircleBtn
             // 
-            this.clipCircleBtn.Location = new System.Drawing.Point(623, 76);
+            this.clipCircleBtn.Location = new System.Drawing.Point(623, 268);
             this.clipCircleBtn.Name = "clipCircleBtn";
             this.clipCircleBtn.Size = new System.Drawing.Size(105, 58);
             this.clipCircleBtn.TabIndex = 12;
@@ -179,7 +182,7 @@ namespace TestApp
             // 
             // clipEllipseBtn
             // 
-            this.clipEllipseBtn.Location = new System.Drawing.Point(623, 140);
+            this.clipEllipseBtn.Location = new System.Drawing.Point(623, 332);
             this.clipEllipseBtn.Name = "clipEllipseBtn";
             this.clipEllipseBtn.Size = new System.Drawing.Size(105, 58);
             this.clipEllipseBtn.TabIndex = 13;
@@ -189,7 +192,7 @@ namespace TestApp
             // 
             // clipTriangleBtn
             // 
-            this.clipTriangleBtn.Location = new System.Drawing.Point(623, 204);
+            this.clipTriangleBtn.Location = new System.Drawing.Point(623, 396);
             this.clipTriangleBtn.Name = "clipTriangleBtn";
             this.clipTriangleBtn.Size = new System.Drawing.Size(105, 58);
             this.clipTriangleBtn.TabIndex = 14;
@@ -197,22 +200,55 @@ namespace TestApp
             this.clipTriangleBtn.UseVisualStyleBackColor = true;
             this.clipTriangleBtn.Click += new System.EventHandler(this.clipTriangleBtn_Click);
             // 
-            // doubleTextBtn
+            // multiTextBtn
             // 
-            this.doubleTextBtn.Location = new System.Drawing.Point(512, 76);
-            this.doubleTextBtn.Name = "doubleTextBtn";
-            this.doubleTextBtn.Size = new System.Drawing.Size(105, 58);
-            this.doubleTextBtn.TabIndex = 15;
-            this.doubleTextBtn.Text = "Наложение десяти текстов";
-            this.doubleTextBtn.UseVisualStyleBackColor = true;
-            this.doubleTextBtn.Click += new System.EventHandler(this.doubleTextBtn_Click);
+            this.multiTextBtn.Location = new System.Drawing.Point(512, 76);
+            this.multiTextBtn.Name = "multiTextBtn";
+            this.multiTextBtn.Size = new System.Drawing.Size(105, 58);
+            this.multiTextBtn.TabIndex = 15;
+            this.multiTextBtn.Text = "Наложение десяти текстов";
+            this.multiTextBtn.UseVisualStyleBackColor = true;
+            this.multiTextBtn.Click += new System.EventHandler(this.multiTextBtn_Click);
+            // 
+            // multiRotatedTextBtn
+            // 
+            this.multiRotatedTextBtn.Location = new System.Drawing.Point(512, 332);
+            this.multiRotatedTextBtn.Name = "multiRotatedTextBtn";
+            this.multiRotatedTextBtn.Size = new System.Drawing.Size(105, 58);
+            this.multiRotatedTextBtn.TabIndex = 16;
+            this.multiRotatedTextBtn.Text = "Наложение 10 повёрнутых текстов";
+            this.multiRotatedTextBtn.UseVisualStyleBackColor = true;
+            this.multiRotatedTextBtn.Click += new System.EventHandler(this.multiRotatedTextBtn_Click);
+            // 
+            // multiRotatedBitmapBtn
+            // 
+            this.multiRotatedBitmapBtn.Location = new System.Drawing.Point(512, 460);
+            this.multiRotatedBitmapBtn.Name = "multiRotatedBitmapBtn";
+            this.multiRotatedBitmapBtn.Size = new System.Drawing.Size(105, 58);
+            this.multiRotatedBitmapBtn.TabIndex = 17;
+            this.multiRotatedBitmapBtn.Text = "Наложение 2 повёрнутых картинок";
+            this.multiRotatedBitmapBtn.UseVisualStyleBackColor = true;
+            this.multiRotatedBitmapBtn.Click += new System.EventHandler(this.multiRotatedBitmapBtn_Click);
+            // 
+            // multiBitmapBtn
+            // 
+            this.multiBitmapBtn.Location = new System.Drawing.Point(512, 204);
+            this.multiBitmapBtn.Name = "multiBitmapBtn";
+            this.multiBitmapBtn.Size = new System.Drawing.Size(105, 58);
+            this.multiBitmapBtn.TabIndex = 18;
+            this.multiBitmapBtn.Text = "Наложение двух картинок";
+            this.multiBitmapBtn.UseVisualStyleBackColor = true;
+            this.multiBitmapBtn.Click += new System.EventHandler(this.multiBitmapBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1241, 692);
-            this.Controls.Add(this.doubleTextBtn);
+            this.Controls.Add(this.multiBitmapBtn);
+            this.Controls.Add(this.multiRotatedBitmapBtn);
+            this.Controls.Add(this.multiRotatedTextBtn);
+            this.Controls.Add(this.multiTextBtn);
             this.Controls.Add(this.clipTriangleBtn);
             this.Controls.Add(this.clipEllipseBtn);
             this.Controls.Add(this.clipCircleBtn);
@@ -257,7 +293,10 @@ namespace TestApp
         private System.Windows.Forms.Button clipCircleBtn;
         private System.Windows.Forms.Button clipEllipseBtn;
         private System.Windows.Forms.Button clipTriangleBtn;
-        private System.Windows.Forms.Button doubleTextBtn;
+        private System.Windows.Forms.Button multiTextBtn;
+        private System.Windows.Forms.Button multiRotatedTextBtn;
+        private System.Windows.Forms.Button multiRotatedBitmapBtn;
+        private System.Windows.Forms.Button multiBitmapBtn;
     }
 }
 
