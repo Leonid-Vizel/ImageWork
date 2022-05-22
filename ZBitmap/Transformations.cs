@@ -242,10 +242,10 @@ namespace ZBitmap
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                using (var wrapMode = new ImageAttributes())
+                using (ImageAttributes attributes = new ImageAttributes())
                 {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(initial, new Rectangle(0, 0, size.Width, size.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, wrapMode);
+                    attributes.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(initial, new Rectangle(0, 0, size.Width, size.Height), 0, 0, initial.Width, initial.Height, GraphicsUnit.Pixel, attributes);
                 }
             }
             return newMap;
@@ -282,7 +282,7 @@ namespace ZBitmap
         /// <returns>Вырезанный прямоугольник из изображения</returns>
         public static Bitmap CropImage(Bitmap initial, Rectangle section)
         {
-            var newMap = new Bitmap(section.Width, section.Height);
+            Bitmap newMap = new Bitmap(section.Width, section.Height);
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
                 graphics.DrawImage(initial, 0, 0, section, GraphicsUnit.Pixel);
@@ -417,6 +417,116 @@ namespace ZBitmap
                 graphics.SetClip(new Region(gp), CombineMode.Replace);
                 graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
                 graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод добавления одинвковых отступов для изображения. Размер итогового изображения будет увеличен пропорционально размерам отступов
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="margin">Объект отступа</param>
+        /// <returns>Изображение с отступами</returns>
+        public static Bitmap ApplyMargin(Bitmap initial, Indent margin)
+        {
+            int updateWidth = initial.Width + margin.Width * 2;
+            int updateHeight = initial.Height + margin.Width * 2;
+            Bitmap newMap = new Bitmap(updateWidth, updateHeight);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.FillRectangle(new SolidBrush(margin.Color), new Rectangle(new Point(0,0), newMap.Size));
+                graphics.DrawImage(initial, new Rectangle(new Point(margin.Width, margin.Width), initial.Size));
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод добавления отступов разной настройки для изображения. Размер итогового изображения будет увеличен пропорционально размерам отступов
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="margins">Объект отступов</param>
+        /// <returns>Изображение с отступами</returns>
+        public static Bitmap ApplyMargins(Bitmap initial, TotalIndent margins)
+        {
+            int updateWidth = initial.Width + margins.LeftIndent.Width + margins.RightIndent.Width;
+            int updateHeight = initial.Height + margins.TopIndent.Width + margins.BottomIndent.Width;
+            Point topLeftCornerLocation = new Point(0, 0);
+            Point topRightCornerLocation = new Point(margins.LeftIndent.Width + initial.Width, 0);
+            Point bottomLeftCornerLocation = new Point(0, initial.Height + margins.TopIndent.Width);
+            Point bottomRightCornerLocation = new Point(initial.Width + margins.LeftIndent.Width, initial.Height + margins.TopIndent.Width);
+            Bitmap newMap = new Bitmap(updateWidth, updateHeight);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.DrawImage(initial, new Rectangle(new Point(margins.LeftIndent.Width, margins.TopIndent.Width), initial.Size));
+                graphics.FillRectangle(new SolidBrush(margins.TopIndent.Color), new Rectangle(topLeftCornerLocation, new Size(updateWidth, margins.TopIndent.Width)));
+                graphics.FillRectangle(new SolidBrush(margins.BottomIndent.Color), new Rectangle(bottomLeftCornerLocation, new Size(updateWidth, margins.BottomIndent.Width)));
+                graphics.FillRectangle(new SolidBrush(margins.LeftIndent.Color), new Rectangle(topLeftCornerLocation, new Size(margins.LeftIndent.Width, updateHeight)));
+                graphics.FillRectangle(new SolidBrush(margins.RightIndent.Color), new Rectangle(topRightCornerLocation, new Size(margins.RightIndent.Width, updateHeight)));
+
+                if (margins.TopLeftCorner != Color.Transparent)
+                {
+                    graphics.FillRectangle(new SolidBrush(margins.TopLeftCorner), new Rectangle(topLeftCornerLocation, new Size(margins.LeftIndent.Width, margins.TopIndent.Width)));
+                }
+
+                if (margins.TopRightCorner != Color.Transparent)
+                {
+                    graphics.FillRectangle(new SolidBrush(margins.TopRightCorner), new Rectangle(topRightCornerLocation, new Size(margins.RightIndent.Width, margins.TopIndent.Width)));
+                }
+
+                if (margins.BottomLeftCorner != Color.Transparent)
+                {
+                    graphics.FillRectangle(new SolidBrush(margins.BottomLeftCorner), new Rectangle(bottomLeftCornerLocation, new Size(margins.LeftIndent.Width, margins.BottomIndent.Width)));
+                }
+
+                if (margins.BottomRightCorner != Color.Transparent)
+                {
+                    graphics.FillRectangle(new SolidBrush(margins.BottomRightCorner), new Rectangle(bottomRightCornerLocation, new Size(margins.RightIndent.Width, margins.BottomIndent.Width)));
+                }
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод добавления одинвковых отступов для изображения. Размер итогового изображения не будет идентичен размеру исходного
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="margin">Объект отступа</param>
+        /// <returns>Изображение с отступами</returns>
+        public static Bitmap ApplyPadding(Bitmap initial, Indent padding)
+        {
+            int updateWidth = initial.Width - padding.Width * 2;
+            int updateHeight = initial.Height - padding.Width * 2;
+            if (updateWidth <= 0 || updateHeight <= 0)
+            {
+                return null;
+            }
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.FillRectangle(new SolidBrush(padding.Color), new Rectangle(new Point(0, 0), newMap.Size));
+                graphics.DrawImage(initial, new Rectangle(new Point(padding.Width, padding.Width), new Size(updateWidth, updateHeight)));
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// Метод добавления отступов разной настройки для изображения. Размер итогового изображения не будет идентичен размеру исходного
+        /// </summary>
+        /// <param name="initial">Исходное изображение</param>
+        /// <param name="paddings">Объект отступов</param>
+        /// <returns>Изображение с отступами</returns>
+        public static Bitmap ApplyPaddings(Bitmap initial, TotalIndent paddings)
+        {
+            int updateWidth = initial.Width - paddings.LeftIndent.Width - paddings.RightIndent.Width;
+            int updateHeight = initial.Height - paddings.TopIndent.Width - paddings.BottomIndent.Width;
+            if (updateWidth <= 0 || updateHeight <= 0)
+            {
+                return null;
+            }
+            Bitmap newMap = null;
+            using (Bitmap resizedBitmap = Resize(initial, new Size(updateWidth, updateHeight)))
+            {
+                newMap = ApplyMargins(resizedBitmap, paddings);
             }
             return newMap;
         }

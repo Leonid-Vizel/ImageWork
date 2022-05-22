@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapOverlay.cs" />
+    <Compile Include="Indent.cs" />
     <Compile Include="TextOverlay.cs" />
+    <Compile Include="TotalIndent.cs" />
     <Compile Include="Transformations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

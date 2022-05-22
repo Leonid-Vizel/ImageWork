@@ -48,6 +48,11 @@ namespace TestApp
             this.multiRotatedTextBtn = new System.Windows.Forms.Button();
             this.multiRotatedBitmapBtn = new System.Windows.Forms.Button();
             this.multiBitmapBtn = new System.Windows.Forms.Button();
+            this.marginBtn = new System.Windows.Forms.Button();
+            this.marginColorBtn = new System.Windows.Forms.Button();
+            this.paddingBtn = new System.Windows.Forms.Button();
+            this.paddingColorBtn = new System.Windows.Forms.Button();
+            this.demotivateBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -57,16 +62,16 @@ namespace TestApp
             this.pictureBox1.Location = new System.Drawing.Point(11, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(495, 668);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(734, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(845, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(495, 668);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -240,11 +245,66 @@ namespace TestApp
             this.multiBitmapBtn.UseVisualStyleBackColor = true;
             this.multiBitmapBtn.Click += new System.EventHandler(this.multiBitmapBtn_Click);
             // 
+            // marginBtn
+            // 
+            this.marginBtn.Location = new System.Drawing.Point(623, 460);
+            this.marginBtn.Name = "marginBtn";
+            this.marginBtn.Size = new System.Drawing.Size(105, 58);
+            this.marginBtn.TabIndex = 19;
+            this.marginBtn.Text = "[MARGIN]\r\nОтступ 100 с каждой стороны";
+            this.marginBtn.UseVisualStyleBackColor = true;
+            this.marginBtn.Click += new System.EventHandler(this.marginBtn_Click);
+            // 
+            // marginColorBtn
+            // 
+            this.marginColorBtn.Location = new System.Drawing.Point(623, 524);
+            this.marginColorBtn.Name = "marginColorBtn";
+            this.marginColorBtn.Size = new System.Drawing.Size(105, 58);
+            this.marginColorBtn.TabIndex = 20;
+            this.marginColorBtn.Text = "[MARGIN]\r\nОтступ с уголками";
+            this.marginColorBtn.UseVisualStyleBackColor = true;
+            this.marginColorBtn.Click += new System.EventHandler(this.marginColorBtn_Click);
+            // 
+            // paddingBtn
+            // 
+            this.paddingBtn.Location = new System.Drawing.Point(623, 588);
+            this.paddingBtn.Name = "paddingBtn";
+            this.paddingBtn.Size = new System.Drawing.Size(105, 58);
+            this.paddingBtn.TabIndex = 21;
+            this.paddingBtn.Text = "[PADDING]\r\nОтступ 100 с каждой стороны";
+            this.paddingBtn.UseVisualStyleBackColor = true;
+            this.paddingBtn.Click += new System.EventHandler(this.paddingBtn_Click);
+            // 
+            // paddingColorBtn
+            // 
+            this.paddingColorBtn.Location = new System.Drawing.Point(734, 12);
+            this.paddingColorBtn.Name = "paddingColorBtn";
+            this.paddingColorBtn.Size = new System.Drawing.Size(105, 58);
+            this.paddingColorBtn.TabIndex = 22;
+            this.paddingColorBtn.Text = "[PADDING]\r\nОтступ с уголками";
+            this.paddingColorBtn.UseVisualStyleBackColor = true;
+            this.paddingColorBtn.Click += new System.EventHandler(this.paddingColorBtn_Click);
+            // 
+            // demotivateBtn
+            // 
+            this.demotivateBtn.Location = new System.Drawing.Point(734, 76);
+            this.demotivateBtn.Name = "demotivateBtn";
+            this.demotivateBtn.Size = new System.Drawing.Size(105, 58);
+            this.demotivateBtn.TabIndex = 23;
+            this.demotivateBtn.Text = "Демотиватор";
+            this.demotivateBtn.UseVisualStyleBackColor = true;
+            this.demotivateBtn.Click += new System.EventHandler(this.demotivateBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1241, 692);
+            this.ClientSize = new System.Drawing.Size(1353, 692);
+            this.Controls.Add(this.demotivateBtn);
+            this.Controls.Add(this.paddingColorBtn);
+            this.Controls.Add(this.paddingBtn);
+            this.Controls.Add(this.marginColorBtn);
+            this.Controls.Add(this.marginBtn);
             this.Controls.Add(this.multiBitmapBtn);
             this.Controls.Add(this.multiRotatedBitmapBtn);
             this.Controls.Add(this.multiRotatedTextBtn);
@@ -297,6 +357,11 @@ namespace TestApp
         private System.Windows.Forms.Button multiRotatedTextBtn;
         private System.Windows.Forms.Button multiRotatedBitmapBtn;
         private System.Windows.Forms.Button multiBitmapBtn;
+        private System.Windows.Forms.Button marginBtn;
+        private System.Windows.Forms.Button marginColorBtn;
+        private System.Windows.Forms.Button paddingBtn;
+        private System.Windows.Forms.Button paddingColorBtn;
+        private System.Windows.Forms.Button demotivateBtn;
     }
 }
 

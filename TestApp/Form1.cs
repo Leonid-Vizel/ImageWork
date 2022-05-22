@@ -265,5 +265,64 @@ namespace TestApp
                 }
             }
         }
+
+        private void marginBtn_Click(object sender, EventArgs e)
+        {
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = Transformations.ApplyMargin(pictureBox1.Image as Bitmap, new Indent(Color.Black, 100));
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void marginColorBtn_Click(object sender, EventArgs e)
+        {
+            IndentBuilder builder = new IndentBuilder();
+            builder.WithIndent(IndentSides.Top, new Indent(Color.Red, 100));
+            builder.WithIndent(IndentSides.Bottom, new Indent(Color.Red, 100));
+            builder.WithIndent(IndentSides.Left, new Indent(Color.Blue, 100));
+            builder.WithIndent(IndentSides.Right, new Indent(Color.Blue, 100));
+            builder.WithCornerColor(Corners.TopLeft, Color.Green);
+            builder.WithCornerColor(Corners.TopRight, Color.Green);
+            builder.WithCornerColor(Corners.BottomLeft, Color.Green);
+            builder.WithCornerColor(Corners.BottomRight, Color.Green);
+
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = Transformations.ApplyMargins(pictureBox1.Image as Bitmap, builder.Build());
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void paddingBtn_Click(object sender, EventArgs e)
+        {
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = Transformations.ApplyPadding(pictureBox1.Image as Bitmap, new Indent(Color.Black, 100));
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void paddingColorBtn_Click(object sender, EventArgs e)
+        {
+            IndentBuilder builder = new IndentBuilder();
+            builder.WithIndent(IndentSides.Top, new Indent(Color.Red, 100));
+            builder.WithIndent(IndentSides.Bottom, new Indent(Color.Red, 100));
+            builder.WithIndent(IndentSides.Left, new Indent(Color.Blue, 100));
+            builder.WithIndent(IndentSides.Right, new Indent(Color.Blue, 100));
+            builder.WithCornerColor(Corners.TopLeft, Color.Green);
+            builder.WithCornerColor(Corners.TopRight, Color.Green);
+            builder.WithCornerColor(Corners.BottomLeft, Color.Green);
+            builder.WithCornerColor(Corners.BottomRight, Color.Green);
+
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = Transformations.ApplyPaddings(pictureBox1.Image as Bitmap, builder.Build());
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void demotivateBtn_Click(object sender, EventArgs e)
+        {
+            TotalIndent lowerMargin = new IndentBuilder().WithIndent(IndentSides.Bottom, new Indent(Color.Black, 100)).Build();
+            Indent blackMargin = new Indent(Color.Black, 5);
+            Indent whiteMargin = new Indent(Color.White, 3);
+            Image imageToDispose = pictureBox2.Image;
+            //Пока кустарный метод, чуть позже будет сделан метод AddMultiplePaddings
+            pictureBox2.Image = Transformations.ApplyMargins(Transformations.ApplyMargin(Transformations.ApplyMargin(Transformations.ApplyMargin(pictureBox1.Image as Bitmap, blackMargin), whiteMargin), blackMargin), lowerMargin);
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
     }
 }
