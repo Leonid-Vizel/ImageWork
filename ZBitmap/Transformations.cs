@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace ZBitmap
 {
@@ -422,20 +423,53 @@ namespace ZBitmap
         }
 
         /// <summary>
-        /// Метод добавления одинвковых отступов для изображения. Размер итогового изображения будет увеличен пропорционально размерам отступов
+        /// Метод добавления множества слоёв отступов разной настройки для изображения. Размер итогового изображения будет увеличен пропорционально размерам отступов
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
-        /// <param name="margin">Объект отступа</param>
+        /// <param name="marginArray">Все отступы, которые должны быть применены</param>
         /// <returns>Изображение с отступами</returns>
-        public static Bitmap ApplyMargin(Bitmap initial, Indent margin)
+        public static Bitmap ApplyMargins(Bitmap initial, params TotalIndent[] marginArray)
         {
-            int updateWidth = initial.Width + margin.Width * 2;
-            int updateHeight = initial.Height + margin.Width * 2;
+            int updateWidth = initial.Width + marginArray.Sum(x => x.LeftIndent.Width) + marginArray.Sum(x => x.RightIndent.Width);
+            int updateHeight = initial.Height + marginArray.Sum(x => x.TopIndent.Width) + marginArray.Sum(x => x.BottomIndent.Width);
+            Point topLeftCornerLocation = new Point(0, 0);
             Bitmap newMap = new Bitmap(updateWidth, updateHeight);
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
-                graphics.FillRectangle(new SolidBrush(margin.Color), new Rectangle(new Point(0,0), newMap.Size));
-                graphics.DrawImage(initial, new Rectangle(new Point(margin.Width, margin.Width), initial.Size));
+                foreach(TotalIndent margin in marginArray.Reverse())
+                {
+                    Point topRightCornerLocation = new Point(updateWidth - margin.RightIndent.Width, 0);
+                    Point bottomLeftCornerLocation = new Point(0, updateHeight - margin.BottomIndent.Width);
+                    Point bottomRightCornerLocation = new Point(updateWidth - margin.RightIndent.Width, updateHeight - margin.BottomIndent.Width);
+                    graphics.FillRectangle(new SolidBrush(margin.TopIndent.Color), new Rectangle(topLeftCornerLocation, new Size(updateWidth, margin.TopIndent.Width)));
+                    graphics.FillRectangle(new SolidBrush(margin.BottomIndent.Color), new Rectangle(bottomLeftCornerLocation, new Size(updateWidth, margin.BottomIndent.Width)));
+                    graphics.FillRectangle(new SolidBrush(margin.LeftIndent.Color), new Rectangle(topLeftCornerLocation, new Size(margin.LeftIndent.Width, updateHeight)));
+                    graphics.FillRectangle(new SolidBrush(margin.RightIndent.Color), new Rectangle(topRightCornerLocation, new Size(margin.RightIndent.Width, updateHeight)));
+
+                    if (margin.TopLeftCorner != Color.Transparent)
+                    {
+                        graphics.FillRectangle(new SolidBrush(margin.TopLeftCorner), new Rectangle(topLeftCornerLocation, new Size(margin.LeftIndent.Width, margin.TopIndent.Width)));
+                    }
+
+                    if (margin.TopRightCorner != Color.Transparent)
+                    {
+                        graphics.FillRectangle(new SolidBrush(margin.TopRightCorner), new Rectangle(topRightCornerLocation, new Size(margin.RightIndent.Width, margin.TopIndent.Width)));
+                    }
+
+                    if (margin.BottomLeftCorner != Color.Transparent)
+                    {
+                        graphics.FillRectangle(new SolidBrush(margin.BottomLeftCorner), new Rectangle(bottomLeftCornerLocation, new Size(margin.LeftIndent.Width, margin.BottomIndent.Width)));
+                    }
+
+                    if (margin.BottomRightCorner != Color.Transparent)
+                    {
+                        graphics.FillRectangle(new SolidBrush(margin.BottomRightCorner), new Rectangle(bottomRightCornerLocation, new Size(margin.RightIndent.Width, margin.BottomIndent.Width)));
+                    }
+                    graphics.TranslateTransform(margin.LeftIndent.Width, margin.TopIndent.Width);
+                    updateWidth -= margin.LeftIndent.Width + margin.RightIndent.Width;
+                    updateHeight -= margin.TopIndent.Width + margin.BottomIndent.Width;
+                }
+                graphics.DrawImage(initial, new Rectangle(new Point(0,0), initial.Size));
             }
             return newMap;
         }
@@ -446,7 +480,7 @@ namespace ZBitmap
         /// <param name="initial">Исходное изображение</param>
         /// <param name="margins">Объект отступов</param>
         /// <returns>Изображение с отступами</returns>
-        public static Bitmap ApplyMargins(Bitmap initial, TotalIndent margins)
+        public static Bitmap ApplyMargin(Bitmap initial, TotalIndent margins)
         {
             int updateWidth = initial.Width + margins.LeftIndent.Width + margins.RightIndent.Width;
             int updateHeight = initial.Height + margins.TopIndent.Width + margins.BottomIndent.Width;
@@ -487,35 +521,12 @@ namespace ZBitmap
         }
 
         /// <summary>
-        /// Метод добавления одинвковых отступов для изображения. Размер итогового изображения не будет идентичен размеру исходного
-        /// </summary>
-        /// <param name="initial">Исходное изображение</param>
-        /// <param name="margin">Объект отступа</param>
-        /// <returns>Изображение с отступами</returns>
-        public static Bitmap ApplyPadding(Bitmap initial, Indent padding)
-        {
-            int updateWidth = initial.Width - padding.Width * 2;
-            int updateHeight = initial.Height - padding.Width * 2;
-            if (updateWidth <= 0 || updateHeight <= 0)
-            {
-                return null;
-            }
-            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
-            using (Graphics graphics = Graphics.FromImage(newMap))
-            {
-                graphics.FillRectangle(new SolidBrush(padding.Color), new Rectangle(new Point(0, 0), newMap.Size));
-                graphics.DrawImage(initial, new Rectangle(new Point(padding.Width, padding.Width), new Size(updateWidth, updateHeight)));
-            }
-            return newMap;
-        }
-
-        /// <summary>
         /// Метод добавления отступов разной настройки для изображения. Размер итогового изображения не будет идентичен размеру исходного
         /// </summary>
         /// <param name="initial">Исходное изображение</param>
         /// <param name="paddings">Объект отступов</param>
         /// <returns>Изображение с отступами</returns>
-        public static Bitmap ApplyPaddings(Bitmap initial, TotalIndent paddings)
+        public static Bitmap ApplyPadding(Bitmap initial, TotalIndent paddings)
         {
             int updateWidth = initial.Width - paddings.LeftIndent.Width - paddings.RightIndent.Width;
             int updateHeight = initial.Height - paddings.TopIndent.Width - paddings.BottomIndent.Width;
@@ -526,7 +537,7 @@ namespace ZBitmap
             Bitmap newMap = null;
             using (Bitmap resizedBitmap = Resize(initial, new Size(updateWidth, updateHeight)))
             {
-                newMap = ApplyMargins(resizedBitmap, paddings);
+                newMap = ApplyMargin(resizedBitmap, paddings);
             }
             return newMap;
         }

@@ -2,19 +2,46 @@
 
 namespace ZBitmap
 {
+    /// <summary>
+    /// Класс с информацией о всех отступах
+    /// </summary>
     public class TotalIndent
     {
         #region Indents
-        public Indent TopIndent { get; set; }
-        public Indent RightIndent { get; set; }
-        public Indent LeftIndent { get; set; }
-        public Indent BottomIndent { get; set; }
+        /// <summary>
+        /// Верхний отступ
+        /// </summary>
+        public Indent TopIndent { get; internal set; }
+        /// <summary>
+        /// Правый отступ
+        /// </summary>
+        public Indent RightIndent { get; internal set; }
+        /// <summary>
+        /// Левый отступ
+        /// </summary>
+        public Indent LeftIndent { get; internal set; }
+        /// <summary>
+        /// Нижний отступ
+        /// </summary>
+        public Indent BottomIndent { get; internal set; }
         #endregion
 
         #region Intersections
+        /// <summary>
+        /// Цвет верхнего левого пересечения отступов
+        /// </summary>
         public Color TopLeftCorner { get; set; }
+        /// <summary>
+        /// Цвет верхнего правого пересечения отступов
+        /// </summary>
         public Color TopRightCorner { get; set; }
+        /// <summary>
+        /// Цвет нижнего левого пересечения отступов
+        /// </summary>
         public Color BottomLeftCorner { get; set; }
+        /// <summary>
+        /// Цвет нижнего правого пересечения отступов
+        /// </summary>
         public Color BottomRightCorner { get; set; }
         #endregion
 
@@ -32,6 +59,12 @@ namespace ZBitmap
             CornerColors = new Color[4] { Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent };
         }
 
+        /// <summary>
+        /// Задаёт отступ для определённой стороны
+        /// </summary>
+        /// <param name="side">Сторона отступа</param>
+        /// <param name="indent">Отступ</param>
+        /// <returns>Текущий объект TotalIndent</returns>
         public IndentBuilder WithIndent(IndentSides side, Indent indent)
         {
             int index = (int)side;
@@ -42,6 +75,55 @@ namespace ZBitmap
             return this;
         }
 
+        /// <summary>
+        /// Задаёт одинаковый отступ со всех сторон
+        /// </summary>
+        /// <param name="indent">Отступ</param>
+        /// <returns>Текущий объект TotalIndent</returns>
+        public IndentBuilder WithAllIndent(Indent indent)
+        {
+            for (int i = 0; i < Indents.Length; i++)
+            {
+                Indents[i] = indent;
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Задаёт одинаковый отступ со всех сторон
+        /// </summary>
+        /// <param name="color">Цвет отступа</param>
+        /// <param name="width">Ширина отступа</param>
+        /// <returns>Текущий объект TotalIndent</returns>
+        public IndentBuilder WithAllIndent(Color color, int width = 0)
+        {
+            var indent = new Indent(color, width);
+            for (int i = 0; i < Indents.Length; i++)
+            {
+                Indents[i] = indent;
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Задаёт одинаковый цвет всех пересенчений отступов
+        /// </summary>
+        /// <param name="color">Цвет пересечения</param>
+        /// <returns>Текущий объект TotalIndent</returns>
+        public IndentBuilder WithAllCornersColor(Color color)
+        {
+            for (int i = 0; i < CornerColors.Length; i++)
+            {
+                CornerColors[i] = color;
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Задаёт цвет одного из пересечений отступов (Углов)
+        /// </summary>
+        /// <param name="color">Цвет пересечения</param>
+        /// <returns>Текущий объект TotalIndent</returns>
         public IndentBuilder WithCornerColor(Corners corner, Color color)
         {
             int index = (int)corner;
@@ -52,6 +134,10 @@ namespace ZBitmap
             return this;
         }
 
+        /// <summary>
+        /// Собирает ранее настроенные параметры в объект типа TotalIndent
+        /// </summary>
+        /// <returns>Объект типа TotalIndent</returns>
         public TotalIndent Build()
             => new TotalIndent()
             { 
@@ -66,6 +152,9 @@ namespace ZBitmap
             };
     }
 
+    /// <summary>
+    /// Стороны отступов
+    /// </summary>
     public enum IndentSides
     {
         Top,
@@ -74,6 +163,9 @@ namespace ZBitmap
         Bottom
     }
 
+    /// <summary>
+    /// Углы пересечений
+    /// </summary>
     public enum Corners
     {
         TopLeft,

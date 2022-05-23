@@ -16,6 +16,11 @@ namespace ZBitmap
         /// </summary>
         public int Width { get; set; }
 
+        /// <summary>
+        /// Конструктор класса Indent
+        /// </summary>
+        /// <param name="color">Цвет отступа</param>
+        /// <param name="width">Ширина отступа</param>
         public Indent(Color color, int width = 0)
         {
             Color = color;
