@@ -53,6 +53,7 @@ namespace TestApp
             this.paddingBtn = new System.Windows.Forms.Button();
             this.paddingColorBtn = new System.Windows.Forms.Button();
             this.demotivateBtn = new System.Windows.Forms.Button();
+            this.roundedBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -287,7 +288,7 @@ namespace TestApp
             // 
             // demotivateBtn
             // 
-            this.demotivateBtn.Location = new System.Drawing.Point(734, 76);
+            this.demotivateBtn.Location = new System.Drawing.Point(734, 140);
             this.demotivateBtn.Name = "demotivateBtn";
             this.demotivateBtn.Size = new System.Drawing.Size(105, 58);
             this.demotivateBtn.TabIndex = 23;
@@ -295,11 +296,22 @@ namespace TestApp
             this.demotivateBtn.UseVisualStyleBackColor = true;
             this.demotivateBtn.Click += new System.EventHandler(this.demotivateBtn_Click);
             // 
+            // roundedBtn
+            // 
+            this.roundedBtn.Location = new System.Drawing.Point(734, 76);
+            this.roundedBtn.Name = "roundedBtn";
+            this.roundedBtn.Size = new System.Drawing.Size(105, 58);
+            this.roundedBtn.TabIndex = 24;
+            this.roundedBtn.Text = "Закруглённые углы";
+            this.roundedBtn.UseVisualStyleBackColor = true;
+            this.roundedBtn.Click += new System.EventHandler(this.roundedBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1353, 692);
+            this.Controls.Add(this.roundedBtn);
             this.Controls.Add(this.demotivateBtn);
             this.Controls.Add(this.paddingColorBtn);
             this.Controls.Add(this.paddingBtn);
@@ -362,6 +374,7 @@ namespace TestApp
         private System.Windows.Forms.Button paddingBtn;
         private System.Windows.Forms.Button paddingColorBtn;
         private System.Windows.Forms.Button demotivateBtn;
+        private System.Windows.Forms.Button roundedBtn;
     }
 }
 

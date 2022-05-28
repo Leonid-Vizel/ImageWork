@@ -347,9 +347,14 @@ namespace ZBitmap
             {
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 graphics.TranslateTransform(newMap.Width / 2, newMap.Height / 2);
-                GraphicsPath gp = new GraphicsPath();
-                gp.AddEllipse(0 - radius, 0 - radius, side, side);
-                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                using (GraphicsPath gp = new GraphicsPath())
+                {
+                    gp.AddEllipse(0 - radius, 0 - radius, side, side);
+                    using (Region region = new Region(gp))
+                    {
+                        graphics.SetClip(region, CombineMode.Replace);
+                    }
+                }
                 graphics.DrawImage(initial, new Rectangle(-radius, -radius, side, side), new Rectangle(initial.Width / 2 - radius, initial.Height / 2 - radius, side, side), GraphicsUnit.Pixel);
                 graphics.Flush();
             }
@@ -367,9 +372,14 @@ namespace ZBitmap
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                GraphicsPath gp = new GraphicsPath();
-                gp.AddEllipse(0, 0, initial.Width, initial.Height);
-                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                using (GraphicsPath gp = new GraphicsPath())
+                {
+                    gp.AddEllipse(0, 0, initial.Width, initial.Height);
+                    using (Region region = new Region(gp))
+                    {
+                        graphics.SetClip(region, CombineMode.Replace);
+                    }
+                }
                 graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
                 graphics.Flush();
             }
@@ -387,14 +397,19 @@ namespace ZBitmap
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                GraphicsPath gp = new GraphicsPath();
-                gp.AddPolygon(new PointF[3]
+                using (GraphicsPath gp = new GraphicsPath())
                 {
+                    gp.AddPolygon(new PointF[3]
+                    {
                     new PointF((float)initial.Width / 2, 0),
                     new PointF(initial.Width, initial.Height),
                     new PointF(0, initial.Height)
-                });
-                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                    });
+                    using (Region region = new Region(gp))
+                    {
+                        graphics.SetClip(region, CombineMode.Replace);
+                    }
+                }
                 graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
                 graphics.Flush();
             }
@@ -413,10 +428,46 @@ namespace ZBitmap
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                GraphicsPath gp = new GraphicsPath();
-                gp.AddPolygon(polygonPoints);
-                graphics.SetClip(new Region(gp), CombineMode.Replace);
+                using (GraphicsPath gp = new GraphicsPath())
+                {
+                    gp.AddPolygon(polygonPoints);
+                    using (Region region = new Region(gp))
+                    {
+                        graphics.SetClip(region, CombineMode.Replace);
+                    }
+                }
                 graphics.DrawImage(initial, new Rectangle(0, 0, initial.Width, initial.Height), new Rectangle(0, 0, initial.Width, initial.Height), GraphicsUnit.Pixel);
+                graphics.Flush();
+            }
+            return newMap;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="initial"></param>
+        /// <param name="radius"></param>
+        /// <param name="cornerColor"></param>
+        /// <returns></returns>
+        public static Bitmap ApplyRoundedCorners(Bitmap initial, int radius, Color cornerColor)
+        {
+            radius *= 2;
+            Bitmap newMap = new Bitmap(initial.Width, initial.Height);
+            using (Graphics graphics = Graphics.FromImage(newMap))
+            {
+                graphics.Clear(cornerColor);
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (GraphicsPath gp = new GraphicsPath())
+                {
+                    gp.AddArc(0, 0, radius, radius, 180, 90);
+                    gp.AddArc(0 + newMap.Width - radius, 0, radius, radius, 270, 90);
+                    gp.AddArc(0 + newMap.Width - radius, 0 + newMap.Height - radius, radius, radius, 0, 90);
+                    gp.AddArc(0, 0 + newMap.Height - radius, radius, radius, 90, 90);
+                    using (Brush brush = new TextureBrush(initial))
+                    {
+                        graphics.FillPath(brush, gp);
+                    }
+                }
                 graphics.Flush();
             }
             return newMap;
@@ -436,7 +487,7 @@ namespace ZBitmap
             Bitmap newMap = new Bitmap(updateWidth, updateHeight);
             using (Graphics graphics = Graphics.FromImage(newMap))
             {
-                foreach(TotalIndent margin in marginArray.Reverse())
+                foreach (TotalIndent margin in marginArray.Reverse())
                 {
                     Point topRightCornerLocation = new Point(updateWidth - margin.RightIndent.Width, 0);
                     Point bottomLeftCornerLocation = new Point(0, updateHeight - margin.BottomIndent.Width);
@@ -469,7 +520,7 @@ namespace ZBitmap
                     updateWidth -= margin.LeftIndent.Width + margin.RightIndent.Width;
                     updateHeight -= margin.TopIndent.Width + margin.BottomIndent.Width;
                 }
-                graphics.DrawImage(initial, new Rectangle(new Point(0,0), initial.Size));
+                graphics.DrawImage(initial, new Rectangle(new Point(0, 0), initial.Size));
             }
             return newMap;
         }

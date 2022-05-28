@@ -323,5 +323,12 @@ namespace TestApp
             pictureBox2.Image = Transformations.ApplyMargins(pictureBox1.Image as Bitmap, blackMargin, whiteMargin, blackMargin, lowerMargin);
             imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
         }
+
+        private void roundedBtn_Click(object sender, EventArgs e)
+        {
+            Image imageToDispose = pictureBox2.Image;
+            pictureBox2.Image = Transformations.ApplyRoundedCorners(pictureBox1.Image as Bitmap, 100, Color.AliceBlue);
+            imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
     }
 }
