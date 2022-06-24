@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>ZBitmap.csproj</id>
+    <version>1.0.0</version>
+    <authors>Vizel_Leonid</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/Leonid-Vizel/ZBitmap</projectUrl>
+    <description>Bitmap editing tool</description>
+    <releaseNotes>Initial upload</releaseNotes>
+    <copyright>Vizel Leonid Copyright 2022</copyright>
+    <tags>Bitmap Vizel</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.8">
+      </group>
+    </dependencies>
+  </metadata>
+</package>
