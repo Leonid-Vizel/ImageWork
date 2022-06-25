@@ -1,7 +1,10 @@
 # ZBitmap
 ZBitmap - Simple .Net library for fast and easy Bitmap editing
 
-#### Methods represented here:
+# Download
+<a href = "https://www.nuget.org/packages/ZBitmap"><img src = "https://img.shields.io/nuget/v/ZBitmap"></a>
+
+# Methods
 ✅ToBlackWhite() - Transforms image colors to gray scale
 
 ✅PasteText() - Pastes text on the image 
