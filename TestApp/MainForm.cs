@@ -5,9 +5,9 @@ using ZBitmap;
 
 namespace TestApp
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -196,16 +196,16 @@ namespace TestApp
         {
             Bitmap fromBox = new Bitmap(pictureBox1.Image as Bitmap);
             Transformations.PasteTexts(fromBox,
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 10F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 20F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 30F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 40F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 50F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 60F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 70F),
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 80F),
                 new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(120, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(140, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(160, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(180, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(200, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(220, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(240, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(260, 100), Font, 90F),
-                new TextOverlay("COCK AND BALLS", Color.Red, new Point(280, 100), Font, 90F)
+                new TextOverlay("COCK AND BALLS", Color.Red, new Point(100, 100), Font, 100F)
                 );
             Image imageToDispose = pictureBox2.Image;
             pictureBox2.Image = fromBox;
@@ -327,8 +327,68 @@ namespace TestApp
         private void roundedBtn_Click(object sender, EventArgs e)
         {
             Image imageToDispose = pictureBox2.Image;
-            pictureBox2.Image = Transformations.ApplyRoundedCorners(pictureBox1.Image as Bitmap, 100, Color.AliceBlue);
+            pictureBox2.Image = Transformations.ApplyRoundedCorners(pictureBox1.Image as Bitmap, 100, Color.Transparent);
             imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+        }
+
+        private void translateBtn_Click(object sender, EventArgs e)
+        {
+            if (translateBtn.Text.Equals("Translate to English"))
+            {
+                translateBtn.Text = "Translate back to Russian";
+                Text = "Library test";
+                textBtn.Text = "Text overlay";
+                bitmapBtn.Text = "Bitmap overlay";
+                rotatedTextBtn.Text = "Rotated text overlay";
+                rotatedBitmapBtn.Text = "Rotated bitmap overlay";
+                opacityBtn.Text = "Set opacity to 50%";
+                sizeChangeBtn.Text = "Resize to 1000 x1000";
+                grayShadeBtn.Text = "To gray shade";
+                cropBitmap.Text = "Clip square 100x100";
+                inverseColorBtn.Text = "Invert colors";
+                mirrorBtn.Text = "Mirror (X)";
+                clipCircleBtn.Text = "Clip circle";
+                clipEllipseBtn.Text = "Clip ellipse";
+                clipTriangleBtn.Text = "Clip triangle";
+                multiTextBtn.Text = "Overlay of 10 texts";
+                multiRotatedTextBtn.Text = "Overlay of 10 rotated texts";
+                multiRotatedBitmapBtn.Text = "Overlay of 2 rotated bitmaps";
+                multiBitmapBtn.Text = "Overlay of 2 bitmaps";
+                marginBtn.Text = "Margin 100 from each side";
+                marginColorBtn.Text = "Margin with corners";
+                paddingBtn.Text = "Padding 100 from each side";
+                paddingColorBtn.Text = "Padding with corners";
+                demotivateBtn.Text = "Demotivator";
+                roundedBtn.Text = "Rounded corners";
+            }
+            else
+            {
+                translateBtn.Text = "Translate to English";
+                Text = "Тест либы";
+                textBtn.Text = "Наложение текста";
+                bitmapBtn.Text = "Наложение картинки";
+                rotatedTextBtn.Text = "Наложение повёрнутого текста";
+                rotatedBitmapBtn.Text = "Наложение повёрнутого текста";
+                opacityBtn.Text = "Задать прозрачность 50%";
+                sizeChangeBtn.Text = "Задать размер 1000 x1000";
+                grayShadeBtn.Text = "В оттенок серого";
+                cropBitmap.Text = "Вырезать квадрат 100x100";
+                inverseColorBtn.Text = "Инверсия цвета";
+                mirrorBtn.Text = "Отзеркалить (X)";
+                clipCircleBtn.Text = "Вырезать круг";
+                clipEllipseBtn.Text = "Вырезать эллипс";
+                clipTriangleBtn.Text = "Вырезать треугольник";
+                multiTextBtn.Text = "Наложение десяти текстов";
+                multiRotatedTextBtn.Text = "Наложение 10 повёрнутых текстов";
+                multiRotatedBitmapBtn.Text = "Наложение 2 повёрнутых картинок";
+                multiBitmapBtn.Text = "Наложение двух картинок";
+                marginBtn.Text = "[MARGIN]\r\nОтступ 100 с каждой стороны";
+                marginColorBtn.Text = "[MARGIN]\r\nОтступ с уголками";
+                paddingBtn.Text = "[PADDING]\r\nОтступ 100 с каждой стороны";
+                paddingColorBtn.Text = "[PADDING]\r\nОтступ с уголками";
+                demotivateBtn.Text = "Демотиватор";
+                roundedBtn.Text = "Закруглённые углы";
+            }
         }
     }
 }

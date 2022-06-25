@@ -1,7 +1,7 @@
 ﻿
 namespace TestApp
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -54,6 +54,7 @@ namespace TestApp
             this.paddingColorBtn = new System.Windows.Forms.Button();
             this.demotivateBtn = new System.Windows.Forms.Button();
             this.roundedBtn = new System.Windows.Forms.Button();
+            this.translateBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -306,11 +307,22 @@ namespace TestApp
             this.roundedBtn.UseVisualStyleBackColor = true;
             this.roundedBtn.Click += new System.EventHandler(this.roundedBtn_Click);
             // 
-            // Form1
+            // translateBtn
+            // 
+            this.translateBtn.Location = new System.Drawing.Point(512, 657);
+            this.translateBtn.Name = "translateBtn";
+            this.translateBtn.Size = new System.Drawing.Size(327, 23);
+            this.translateBtn.TabIndex = 25;
+            this.translateBtn.Text = "Translate to English";
+            this.translateBtn.UseVisualStyleBackColor = true;
+            this.translateBtn.Click += new System.EventHandler(this.translateBtn_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1353, 692);
+            this.Controls.Add(this.translateBtn);
             this.Controls.Add(this.roundedBtn);
             this.Controls.Add(this.demotivateBtn);
             this.Controls.Add(this.paddingColorBtn);
@@ -338,7 +350,7 @@ namespace TestApp
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Тест либы";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -375,6 +387,7 @@ namespace TestApp
         private System.Windows.Forms.Button paddingColorBtn;
         private System.Windows.Forms.Button demotivateBtn;
         private System.Windows.Forms.Button roundedBtn;
+        private System.Windows.Forms.Button translateBtn;
     }
 }
 

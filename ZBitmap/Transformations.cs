@@ -113,8 +113,7 @@ namespace ZBitmap
                         graphics.TranslateTransform(overlay.Location.X, overlay.Location.Y);
                         graphics.RotateTransform(overlay.Angle);
                         graphics.DrawString(overlay.Text, overlay.Font, new SolidBrush(overlay.Color), new Point(0, 0));
-                        graphics.RotateTransform(-overlay.Angle);
-                        graphics.TranslateTransform(-overlay.Location.X, -overlay.Location.Y);
+                        graphics.ResetTransform();
                     }
                     else
                     {
@@ -198,8 +197,7 @@ namespace ZBitmap
                                 graphics.DrawImage(resizedBitmap, new Point(0, 0));
                             }
                         }
-                        graphics.TranslateTransform(-overlay.Location.X, -overlay.Location.Y);
-                        graphics.RotateTransform(-overlay.Angle);
+                        graphics.ResetTransform();
                     }
                     else
                     {
@@ -442,7 +440,7 @@ namespace ZBitmap
         }
 
         /// <summary>
-        /// 
+        /// Метод для добавления скруглённых углов
         /// </summary>
         /// <param name="initial"></param>
         /// <param name="radius"></param>
