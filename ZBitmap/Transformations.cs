@@ -152,7 +152,6 @@ namespace ZBitmap
                 }
                 else
                 {
-
                     if (initial.Size.Equals(overlay.Size))
                     {
                         graphics.DrawImage(overlay.Bitmap, overlay.Location);
