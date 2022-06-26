@@ -2,16 +2,16 @@
 <package >
   <metadata>
     <id>ZBitmap</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <authors>Leonid-Vizel</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <repository type="git" url="https://github.com/Leonid-Vizel/ZBitmap" branch="master" commit="ff2bf5b81905c3626d7cff72bb63aa9d7c3bad1d" />
     <projectUrl>https://github.com/Leonid-Vizel/ZBitmap</projectUrl>
     <description>Bitmap editing tool</description>
-    <releaseNotes>Initial upload</releaseNotes>
+    <releaseNotes>Fixed Rotation and added Tags</releaseNotes>
     <copyright>Leonid Vizel Copyright 2022</copyright>
-    <tags>Bitmap Vizel</tags>
+    <tags>Bitmap Vizel GrayScale Paste Rotate Text Resize Opacity Invert Margin Padding Rounded Corner Morror</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.8">
       </group>
